@@ -1,2 +1,2 @@
-# Facedetection-using-Flask
-Face detection using Haar Cascade &amp; Flask Library
+# Face detection and Face regonization
+Using in web browser Flask Library
