@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>
+    <div id="particles">
+        <div id="intro" class="h-100">
+            <div class="container-fluid ">
+                {% include 'navbar.html' %}
+                <div class="col-12 border" id="bg">
+                    <div class="row">
+                        <div class="col-6 pt-2">
+                            <div class="bg-info text-white text-center rounded-top">
+                                <div class="col-md-12 p-2">
+                                    {{ camera }}
+                                </div>
+                            </div>
+                            <div class="card border" id="result">
+                                <img src="static\default\no-image.jpg"
+                                     class="rounded mx-auto d-block img-thumbnail img-fluid">
+                            </div>
+                        </div>
+                        <div class="col-6 pt-2">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="bg-info text-white text-center rounded-top">
+                                        <div class="col-md-12 p-2">
+                                            Form
+                                        </div>
+                                    </div>
+                                    <div class="card border pt-1 pl-3 pr-3">
+                                        <form action="/setdata" method="post" autocomplete="off" id="form_dataset"
+                                              enctype="multipart/form-data">
+                                            <input class="form-control" id="name" name="name"
+                                                   placeholder="ກະລຸນາ ປ້ອນຊື່ຂອງທ່ານ"
+                                                   required>
+                                            <input type="hidden" name="action" id="action">
+                                            <div class="row pt-3 pb-3">
+                                                <div class="col-4">
+                                                    <div class=" btn-group" role="group"
+                                                         aria-label="Button group with nested dropdown">
+                                                        <div class="btn-group" role="group">
+                                                            <button id="btnGroupDrop1" type="button"
+                                                                    class="bg-white text-danger btn-outline-danger btn  mr-1 dropdown-toggle"
+                                                                    data-toggle="dropdown"
+                                                                    aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-user-circle"></i> ລົງທະບຽນໃບໝ້າ
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                                <button type="submit"
+                                                                        class="bg-white text-danger btn-outline-danger btn  dropdown-item"
+                                                                        name="action"
+                                                                        id="webcam">
+                                                                    <i class="fa fa-camera"></i> ເລືອກ Camera
+                                                                </button>
+                                                                <div class="dropdown-divider"></div>
+                                                                <button type="submit"
+                                                                        class="bg-white text-danger btn-outline-danger btn dropdown-item"
+                                                                        name="action"
+                                                                        id="img"
+                                                                        value="img">
+                                                                    <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <!--<button type="submit" class="btn btn-outline-danger" name="action"
+                                                            value="train">
+                                                        <span class="fa fa-train"></span>
+                                                        Register Face
+                                                    </button>-->
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <a href="#" class="btn btn-outline-warning" id="trainer">
+                                                        <span class="fa fa-train"></span>
+                                                        Train (ຮຽນຮູ້ໃບໜ້າ)
+                                                    </a>
+                                                </div>
+
+                                                <div class="col-4 text-right">
+                                                    <div class=" btn-group" role="group"
+                                                         aria-label="Button group with nested dropdown">
+                                                        <div class="btn-group" role="group">
+                                                            <button id="btnGroupDrop1" type="button"
+                                                                    class="bg-white text-success btn-outline-success btn  mr-1 dropdown-toggle"
+                                                                    data-toggle="dropdown"
+                                                                    aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-user-circle"></i> Detection (ທົດສອບ)
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                                <button type="button"
+                                                                        class="bg-white text-success btn-outline-success btn  dropdown-item"
+                                                                        id="predict_webcame">
+                                                                    <i class="fa fa-camera"></i> ເລືອກ Camera
+                                                                </button>
+
+                                                                <div class="dropdown-divider"></div>
+                                                                <button type="button"
+                                                                        class="bg-white text-success btn-outline-success btn dropdown-item"
+                                                                        id="predict_img">
+                                                                    <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!--<a href="#" class="btn btn-outline-success" id="predict">
+                                                        <span class="fa fa-object-group"></span>
+                                                        Detection (ທົດສອບ)
+                                                    </a>-->
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 pt-3">
+                                    <div class="bg-info text-white text-center rounded-top">
+                                        <div class="col-md-12 p-2">
+                                            ລາຍງານຂໍ້ມູນຂອງບຸກຄົນທີ່ສະແກນພົບ
+                                            <a href="#" class="float-right text-white" id="clear">
+                                                <span class="fa fa-times-circle"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="result_person"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

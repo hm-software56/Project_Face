@@ -1,0 +1,25 @@
+<script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>ລະຫັດ</th>
+        <th>ຮູບພາບ</th>
+        <th>ຊື່ ແລະ ນາມສະກຸນ</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if list_person %}
+        {% for k, v in list_person.items() %}
+            <tr>
+                <td width="20">{{ k }}</td>
+                <td width="150"><img src="static\data_person\{{ k }}\1.jpg" class="rounded img-fluid"></td>
+                <td>{{ v }}</td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="3" class="text-center text-danger font-weight-bold">ບໍ່ພົບຂໍ້ມູນ</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>

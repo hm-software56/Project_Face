@@ -1,0 +1,6 @@
+.idea/
+test.py
+__pycache__/
+static/data/
+static/data_person/
+static/photos/detect/
