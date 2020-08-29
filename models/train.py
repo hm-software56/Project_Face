@@ -10,7 +10,7 @@ import cameradetect
 import ast
 import re
 
-root = os.path.dirname(os.path.abspath(__file__))
+#root = os.path.dirname(os.path.abspath(__file__))
 
 
 class Traindata(object):
@@ -22,11 +22,11 @@ class Traindata(object):
         known_face_ids = []
         try:
             person_ids = load('data_trained/news_dataset_ids.npy').tolist()
-            for id in os.listdir(os.path.join(root, '..', 'static', 'data')):
+            for id in os.listdir(os.path.join('static', 'data')):
                 if int(id) in person_ids:
                     print(id)
-                    path = [os.path.join(os.path.join(root, '..', 'static', 'data', id), f) for f in
-                            os.listdir(os.path.join(root, '..', 'static', 'data', id))]
+                    path = [os.path.join(os.path.join( 'static', 'data', id), f) for f in
+                            os.listdir(os.path.join('static', 'data', id))]
                     for image in path:
                         try:
                             image_load = face_recognition.load_image_file(image)
