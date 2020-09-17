@@ -1,19 +1,15 @@
 from flask import Flask, render_template, Response, redirect, url_for, request, jsonify, session, Blueprint
 from camera import VideoCamera
-from cameradetect import CameraDetect
-from models.train import Traindata
-from models.register import Register
 import cv2
-from random import choice
 import time
-from flask_bootstrap import Bootstrap
 import os
 import shutil
-from PIL import Image
-from autocrop import Cropper
 from random import randint
-from numpy import load
+from models.register import Register, RegisterForm
 from werkzeug.utils import secure_filename
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 register_route = Blueprint('register_route', __name__)
 setdatacamera = VideoCamera()
@@ -85,11 +81,50 @@ def uploadfile():
     success = False
     for file in files:
         filename = secure_filename(file.filename)
-        path = os.path.join('static', 'photos', str(setdatacamera.person_id))
+        path = os.path.join('static', 'data', str(session['regster_code']))
         if not os.path.exists(path):
             os.makedirs(path)
         file.save(os.path.join(path, filename))
-        setdatacamera.drop(path, filename)
+        RegisterForm().dropface(filename)
         success = True
     if success:
         return jsonify(result=render_template('setdataset.html', time=time.time()))
+
+
+# new function use javascript webcame
+
+
+@register_route.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    model = Register.query.order_by(Register.id.desc()).first()
+    if model:
+        code = model.id + 1
+    else:
+        code = 1
+    if form.validate_on_submit():
+        insert = Register(
+            first_name=form.data['first_name'],
+            last_name=form.data['last_name'],
+            code=code
+        )
+        db.session.add(insert)
+        db.session.commit()
+        session['regster_code'] = insert.code
+        if (request.args.get('action') == 'camera'):
+            return jsonify(result=render_template('modal_video_register.html'))
+        else:
+            return jsonify(result=render_template('modal_upload.html'))
+    return render_template('register.html', form=form)
+
+
+@register_route.route('/captureupload', methods=['GET', 'POST'])
+def captureupload():
+    file = request.files.get('webcam')
+    filename = str(randint(1000000000, 9999999999)) + '.jpg'
+    path = os.path.join('static', 'data', str(session['regster_code']))
+    if not os.path.exists(path):
+        os.makedirs(path)
+    file.save(os.path.join(path, filename))
+    RegisterForm().dropface(filename)
+    return 'Uploaded'

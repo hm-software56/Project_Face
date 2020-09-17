@@ -39,7 +39,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="done">
                 <div class="input-group">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="multiFiles" multiple="multiple">
@@ -48,18 +48,22 @@
                 </div>
                 <p id="msg"></p>
                 <div class="gallery" id="remove">
-                    <img id="blah" src="static/default/no-image.jpg" alt="your image" class="img-fluid img-thumbnail" />
+                    <img id="blah" src="static/default/no-image.jpg" alt="your image" class="img-fluid img-thumbnail"/>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    <il class="fa fa-sign-in-alt"></il>
-                    ຍົກເລິກ
-                </button>
-                <button type="button" class="btn btn-primary" id="upload">
-                    <il class="fa fa-hourglass-end"></il>
-                    ປະມວນຜົນຮູບພາບ
-                </button>
+                <span id="next_reg" style="display: none">
+                    <a href="{{ url_for('register_route.register') }}" class="btn btn-primary" >
+                        <il class="fa fa-hourglass-end"></il>
+                        ລົງທະບຽນ ຜູ້ຕໍ່ໄປ
+                    </a>
+                </span>
+                <span id="close_pr">
+                    <button type="button" class="btn btn-primary" id="upload">
+                        <il class="fa fa-hourglass-end"></il>
+                        ປະມວນຜົນຮູບພາບ
+                    </button>
+                </span>
             </div>
         </div>
     </div>

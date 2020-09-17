@@ -16,13 +16,18 @@ from numpy import load
 from routes.register_route import register_route
 from routes.detect_route import detect_route
 from routes.training_route import training_route
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.secret_key = "daxiong123"
+app.secret_key = "daxiong123zzzzzz"
 Bootstrap(app)
 app.register_blueprint(register_route)
 app.register_blueprint(detect_route)
 app.register_blueprint(training_route)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Da123!@#@localhost/face_db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 setdatacamera = VideoCamera()
 pridectcamera = CameraDetect()
@@ -41,6 +46,11 @@ def index():
 @app.route('/jswebcam', methods=['POST', 'GET'])
 def jswebcam():
     return render_template('js_webcam.html')
+
+
+@app.route('/testface', methods=['POST', 'GET'])
+def testface():
+    return render_template('modal_video_register.html')
 
 
 @app.route('/jswebcamupload', methods=['GET', 'POST'])

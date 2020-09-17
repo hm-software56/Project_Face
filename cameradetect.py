@@ -8,7 +8,10 @@ import time
 from models.train import Traindata
 from autocrop import Cropper
 from numpy import load
+from flask_sqlalchemy import SQLAlchemy
+from models.register import Register
 
+db = SQLAlchemy()
 root = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -21,7 +24,7 @@ class CameraDetect(object):
         self.face_locations = []
         self.face_encodings = []
         self.process_this_frame = True
-        self.known_face_names = []
+        self.known_face_code = []
         self.known_face_encodings = []
         self.list_name_show = {}
         self.img_detect = ''
@@ -56,7 +59,7 @@ class CameraDetect(object):
                 matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
                 face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
                 j = np.array(face_distances)
-                face_distance_lessthen = np.sort(j[j < 0.5]) #
+                face_distance_lessthen = np.sort(j[j < 0.5])  #
                 if face_distance_lessthen.all():
                     distance_same_face = True
                 """for i, face_distance in enumerate(face_distances):
@@ -73,7 +76,7 @@ class CameraDetect(object):
                 best_match_index = np.argmin(face_distances)
                 # print(best_match_index)
                 if matches[best_match_index] and distance_same_face:
-                    name_id = self.known_face_names[best_match_index]
+                    name_id = self.known_face_code[best_match_index]
                     # print(name_id)
                     preson_name = self.labels_name.get(int(name_id))
 
@@ -108,9 +111,12 @@ class CameraDetect(object):
     def loadLabelName(self):
         try:
             self.LoadModel()
-            with open("data_trained/name_labels.pickle", "rb") as f:
-                labels_ = pickle.load(f)
-                self.labels_name = {k: v for k, v in labels_.items()}
+            # get data full name from database
+            face_code = self.known_face_code
+            for code in np.unique(face_code):
+                model = Register.query.filter_by(code=code).first()
+                full_name= {model.code: model.first_name + model.last_name}
+                self.labels_name.update(full_name)
 
         except:
             print('Error name label')
@@ -123,12 +129,13 @@ class CameraDetect(object):
         draw.text((x, y), label, font=font, fill=tex_color)
         return pil_im
 
+    # load model trained and Code ID Face Set to Array
     def LoadModel(self):
         data_trainer_faces = load('data_trained/all_data_trainer_faces.npy')
         data_trainer_ids = load('data_trained/all_data_trainer_ids.npy')
-        # self.known_face_names, self.known_face_encodings = Traindata().train()
+        # self.known_face_code, self.known_face_encodings = Traindata().train()
         self.known_face_encodings = data_trainer_faces.tolist()
-        self.known_face_names = data_trainer_ids.tolist()
+        self.known_face_code = data_trainer_ids.tolist()
         # print(type(self.known_face_encodings))
 
     def dropface(self, path):

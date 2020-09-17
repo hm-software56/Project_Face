@@ -1,71 +1,72 @@
 <!-- CSS -->
 <style>
-#my_camera{
- width: 320px;
- height: 240px;
- border: 1px solid black;
-}
+    #my_camera {
+        width: 320px;
+        height: 240px;
+        border: 1px solid black;
+    }
 </style>
 
 <!-- -->
- <div id="my_camera"></div>
- <input type=button value="Configure" onClick="configure()">
- <input type=button value="Take Snapshot" onClick="take_snapshot()">
- <input type=button value="Save Snapshot" onClick="saveSnap()">
+<div id="my_camera"></div>
+<input type=button value="Configure" onClick="configure()">
+<input type=button value="Take Snapshot" onClick="take_snapshot()">
+<input type=button value="Save Snapshot" onClick="saveSnap()">
 
- <div id="results" ></div>
+<div id="results"></div>
 
- <!-- Script -->
+<!-- Script -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/webcam.js') }}"></script>
 
- <!-- Code to handle taking the snapshot and displaying it locally -->
- <script language="JavaScript">
+<!-- Code to handle taking the snapshot and displaying it locally -->
+<script language="JavaScript">
 
- // Configure a few settings and attach camera
+    // Configure a few settings and attach camera
 
-  Webcam.set({
-   width: 320,
-   height: 240,
-   image_format: 'jpeg',
-   jpeg_quality: 90
-  });
-  Webcam.attach( '#my_camera' );
+    Webcam.set({
+        width: 320,
+        height: 240,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
+    Webcam.attach('#my_camera');
 
- function take_snapshot() {
-  // take snapshot and get image data
-  Webcam.snap( function(data_uri) {
-  document.getElementById('results').innerHTML =
-   '<img id="imageprev" src="'+data_uri+'"/>';
-  } );
+    function take_snapshot() {
+        // take snapshot and get image data
+        Webcam.snap(function (data_uri) {
+            document.getElementById('results').innerHTML = '<img id="imageprev" src="' + data_uri + '"/>';
+        });
+        timeout()
 
-  var base64image = document.getElementById("imageprev").src;
-  Webcam.upload( base64image, 'jswebcamupload', function(code, text) {
-  console.log('Save successfully');
-  //console.log(text);
- });
-  //Webcam.reset();
- }
+        var base64image = document.getElementById("imageprev").src;
+        Webcam.upload(base64image, 'jswebcamupload', function (code, text) {
+            console.log('Save successfully');
+            //console.log(text);
+        });
+        //Webcam.reset();
+    }
 
- function timeout() {
+    function timeout() {
+        setTimeout(function () {
+            take_snapshot()
+            timeout();
+        }, 400);
+    }
+
     setTimeout(function () {
-        take_snapshot()
-        timeout();
-    }, 5000);
-}
- setTimeout(function () {
-    timeout()
-}, 5000);
+        timeout()
+    }, 1000);
 
-function saveSnap(){
- // Get base64 value from <img id='imageprev'> source
- var base64image = document.getElementById("imageprev").src;
+    /*function saveSnap() {
+        // Get base64 value from <img id='imageprev'> source
+        var base64image = document.getElementById("imageprev").src;
 
- Webcam.upload( base64image, 'upload1', function(code, text) {
-  console.log('Save successfully');
-  //console.log(text);
- });
+        Webcam.upload(base64image, 'upload1', function (code, text) {
+            console.log('Save successfully');
+            //console.log(text);
+        });
 
-}
+    }*/
 </script>

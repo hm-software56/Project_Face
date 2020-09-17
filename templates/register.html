@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+    <script>
+
+        $(document).ready(function () {
+            $('#bt_img').click(function () {
+                $('#action').val('img');
+            });
+            $('#bt_camera').click(function () {
+                $('#action').val('camera');
+            });
+
+            $('form').submit(function (e) {
+                var action_id = $('#action').val();
+                var url = "{{url_for('register_route.register',action='') }}" + action_id; // send the form data here.
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: $('form').serialize(), // serializes the form's elements.
+                    success: function (data) {
+                        $("#video_modal").html(data.result)
+                    }
+                });
+                e.preventDefault(); // block the traditional submission of the form.
+            });
+
+            // Inject our CSRF token into our AJAX request.
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
+                    }
+                }
+            })
+        });
+    </script>
+    <div id="particles">
+        <div id="intro" class="h-100">
+            <div class="container-fluid ">
+                {% include 'navbar.html' %}
+                <div class="col-12 border" id="bg">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form method=post>
+                                {{ form.hidden_tag() }}
+                                {{ wtf.form_field(form.first_name, class='form-control', placeholder='First name') }}
+                                {{ wtf.form_field(form.last_name, class='form-control', placeholder='Last name') }}
+                                <input id="action" type="hidden" required>
+                                <div class=" btn-group" role="group"
+                                     aria-label="Button group with nested dropdown">
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button"
+                                                class="bg-white text-danger btn-outline-danger btn  mr-1 dropdown-toggle"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-user-circle"></i> ລົງທະບຽນໃບໝ້າ
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            <!--<button type=submit class="btn btn-outline-success">
+                                                <span class="fa fa-camera"></span> ລົງໃບໜ້າ
+                                            </button>-->
+                                            <button type="submit"
+                                                    class="bg-white text-danger btn-outline-danger btn  dropdown-item"
+                                                    id="bt_camera">
+                                                <i class="fa fa-camera"></i> ເລືອກ Camera
+                                            </button>
+                                            <div class="dropdown-divider"></div>
+                                            <button type="submit"
+                                                    class="bg-white text-danger btn-outline-danger btn dropdown-item"
+                                                    id="bt_img">
+                                                <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="video_modal"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
