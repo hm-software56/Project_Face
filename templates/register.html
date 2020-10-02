@@ -32,52 +32,83 @@
                         xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
                     }
                 }
-            })
+            });
+
+            // Country ajax
+            $("#province_id").change(function () {
+                $.ajax({
+                    url: '/listdistrict',
+                    type: 'POST',
+                    data: $('#province_id').serialize(),
+                    success: function (selectOptions) {
+                        $("#district_id").html(selectOptions);
+                    }
+                });
+            });
+
+            // District ajax
+            $("#district_id").change(function () {
+                $.ajax({
+                    url: '/listvillage',
+                    type: 'POST',
+                    data: $('#district_id').serialize(),
+                    success: function (selectOptions) {
+                        $("#village_id").html(selectOptions);
+                    }
+                });
+            });
         });
     </script>
-    <div id="particles">
-        <div id="intro" class="h-100">
-            <div class="container-fluid ">
-                {% include 'navbar.html' %}
-                <div class="col-12 border" id="bg">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form method=post>
-                                {{ form.hidden_tag() }}
-                                {{ wtf.form_field(form.first_name, class='form-control', placeholder='First name') }}
-                                {{ wtf.form_field(form.last_name, class='form-control', placeholder='Last name') }}
-                                <input id="action" type="hidden" required>
-                                <div class=" btn-group" role="group"
-                                     aria-label="Button group with nested dropdown">
-                                    <div class="btn-group" role="group">
-                                        <button id="btnGroupDrop1" type="button"
-                                                class="bg-white text-danger btn-outline-danger btn  mr-1 dropdown-toggle"
-                                                data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                            <i class="fa fa-user-circle"></i> ລົງທະບຽນໃບໝ້າ
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            <!--<button type=submit class="btn btn-outline-success">
-                                                <span class="fa fa-camera"></span> ລົງໃບໜ້າ
-                                            </button>-->
-                                            <button type="submit"
-                                                    class="bg-white text-danger btn-outline-danger btn  dropdown-item"
-                                                    id="bt_camera">
-                                                <i class="fa fa-camera"></i> ເລືອກ Camera
-                                            </button>
-                                            <div class="dropdown-divider"></div>
-                                            <button type="submit"
-                                                    class="bg-white text-danger btn-outline-danger btn dropdown-item"
-                                                    id="bt_img">
-                                                <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <div id="video_modal"></div>
-                        </div>
+    <div class="container-fluid ">
+        {% include 'navbar.html' %}
+        <div class="col-12 border" id="bg">
+            <div class="row">
+
+                <div class="col-md-12 p-2">
+                    <div class="bg-info text-white text-center rounded-top pt-2 pb-2">
+                        ລົງທະບຽນຂໍ້ມູນບັດປະຈໍາຕົວ
                     </div>
+                </div>
+                <div class="col-md-12">
+
+                    <form method=post>
+                        {{ form.hidden_tag() }}
+                        {{ wtf.form_field(form.first_name, class='form-control', placeholder='ຊື່') }}
+                        {{ wtf.form_field(form.last_name, class='form-control', placeholder='ນາມສະກຸນ') }}
+                        {{ wtf.form_field(form.province_id, class='form-control', placeholder='ແຂວງ') }}
+                        {{ wtf.form_field(form.district_id, class='form-control', placeholder='ເມືອງ') }}
+                        {{ wtf.form_field(form.village_id, class='form-control', placeholder='ບ້ານ') }}
+                        {{ wtf.form_field(form.date_birth, type='date',class='form-control', placeholder='ວັນເດຶອນປີເກິດ') }}
+                        <input id="action" type="hidden" required>
+                        <div class="btn-group col-sm-12 p-0 " role="group"
+                             aria-label="Button group with nested dropdown">
+                            <div class="btn-group col-sm-12 p-0 " role="group">
+                                <button id="btnGroupDrop1" type="button"
+                                        class=" form-control bg-white text-danger btn-outline-danger btn  mr-1 dropdown-toggle"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-user-circle"></i> ລົງທະບຽນໃບໝ້າ
+                                </button>
+                                <div class="dropdown-menu col text-center" aria-labelledby="btnGroupDrop1">
+                                    <!--<button type=submit class="btn btn-outline-success">
+                                        <span class="fa fa-camera"></span> ລົງໃບໜ້າ
+                                    </button>-->
+                                    <button type="submit"
+                                            class=" bg-white text-danger btn-outline-danger btn  dropdown-item"
+                                            id="bt_camera">
+                                        <i class="fa fa-camera"></i> ເລືອກ Camera
+                                    </button>
+                                    <div class="dropdown-divider"></div>
+                                    <button type="submit"
+                                            class="bg-white text-danger btn-outline-danger btn dropdown-item"
+                                            id="bt_img">
+                                        <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="video_modal"></div>
                 </div>
             </div>
         </div>

@@ -136,7 +136,9 @@
             number_save = number_save + 1
             face_has = true;
             let face = faceVect.get(i);
-            faces.push(new cv.Rect(face.x, face.y, face.width, face.height));
+            let rect = new cv.Rect(face.x, face.y, face.width, face.height);
+            faces.push(rect);
+
         }
         faceMat.delete();
         faceVect.delete();
@@ -216,4 +218,5 @@
         }
     };
 </script>
-<script async src="https://huningxin.github.io/opencv.js/build/wasm/opencv.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/opencv.js') }}"></script>
+<!--<script async src="https://huningxin.github.io/opencv.js/build/wasm/opencv.js"></script>-->

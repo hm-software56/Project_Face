@@ -8,10 +8,10 @@ import time
 from models.train import Traindata
 from autocrop import Cropper
 from numpy import load
-from flask_sqlalchemy import SQLAlchemy
+#from flask_sqlalchemy import SQLAlchemy
 from models.register import Register
 
-db = SQLAlchemy()
+#db = SQLAlchemy()
 root = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -37,7 +37,6 @@ class CameraDetect(object):
 
     def get_frame(self):
         if self.img_detect:
-
             path = os.path.join(root, 'static', 'photos', 'detect', self.img_detect)
             frame = cv2.imread(path)
         else:
@@ -54,28 +53,31 @@ class CameraDetect(object):
 
             for face_encoding in self.face_encodings:
                 preson_name = 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'
-                distance_same_face = False
+                # distance_same_face = False
                 # See if the face is a match for the known face(s)
-                matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
+                # tolerance=0.4 is distance_same_face
+                matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=0.4)
                 face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
-                j = np.array(face_distances)
-                face_distance_lessthen = np.sort(j[j < 0.5])  #
+                """j = np.array(face_distances)
+                face_distance_lessthen = np.sort(j[j < 0.1])  #
                 if face_distance_lessthen.all():
-                    distance_same_face = True
+                    distance_same_face = True"""
                 """for i, face_distance in enumerate(face_distances):
-                    print(i)
+                    # print(i)
                     # print("The test image has a distance of {:.2} from known image #{}".format(face_distance, i))
                     # print("- With a normal cutoff of 0.6, would the test image match the known image? {}".format(
                     #    face_distance < 0.6))
                     # print("- With a very strict cutoff of 0.5, would the test image match the known image? {}".format(
                     #    face_distance < 0.5))
-                    if (face_distance < 0.5):
+                    if (face_distance < 0.4):
                         # print(format(face_distance, '2f'))
                         distance_same_face = True"""
                 # print(matches)
                 best_match_index = np.argmin(face_distances)
-                # print(best_match_index)
-                if matches[best_match_index] and distance_same_face:
+                """print(best_match_index)
+                print(face_distances)
+                print(matches[best_match_index])"""
+                if matches[best_match_index]:  # and distance_same_face:
                     name_id = self.known_face_code[best_match_index]
                     # print(name_id)
                     preson_name = self.labels_name.get(int(name_id))
@@ -115,7 +117,7 @@ class CameraDetect(object):
             face_code = self.known_face_code
             for code in np.unique(face_code):
                 model = Register.query.filter_by(code=code).first()
-                full_name= {model.code: model.first_name + model.last_name}
+                full_name = {model.code: model.first_name + " " + model.last_name}
                 self.labels_name.update(full_name)
 
         except:
@@ -131,8 +133,8 @@ class CameraDetect(object):
 
     # load model trained and Code ID Face Set to Array
     def LoadModel(self):
-        data_trainer_faces = load('data_trained/all_data_trainer_faces.npy')
-        data_trainer_ids = load('data_trained/all_data_trainer_ids.npy')
+        data_trainer_faces = load(os.path.join('static', 'dataset_model', 'all_data_trainer_faces.npy'))
+        data_trainer_ids = load(os.path.join('static', 'dataset_model', 'all_data_trainer_ids.npy'))
         # self.known_face_code, self.known_face_encodings = Traindata().train()
         self.known_face_encodings = data_trainer_faces.tolist()
         self.known_face_code = data_trainer_ids.tolist()

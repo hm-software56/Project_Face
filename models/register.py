@@ -1,18 +1,32 @@
-from wtforms import SubmitField, BooleanField, StringField, PasswordField, validators
+from wtforms import SubmitField, BooleanField, StringField, PasswordField, validators, IntegerField, SelectField, \
+    DateField
 from flask import session
-from flask_wtf import Form
-from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from models.db import db
 from autocrop import Cropper
 from PIL import Image
 import cv2
 import os
 
-db = SQLAlchemy()
+
+class Register(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.Integer)
+    first_name = db.Column(db.String(500))
+    last_name = db.Column(db.String(500))
+    province_id = db.Column(db.Integer)
+    district_id = db.Column(db.Integer)
+    village_id = db.Column(db.Integer)
+    date_birth=db.Column(db.Date)
 
 
-class RegisterForm(Form):
-    first_name = StringField('First Name', [validators.DataRequired()])
-    last_name = StringField('Last Name', [validators.DataRequired()])
+class RegisterForm(FlaskForm):
+    first_name = StringField('ຊື່', [validators.DataRequired()])
+    last_name = StringField('ນາມສະກຸນ', [validators.DataRequired()])
+    province_id = SelectField('ແຂວງ', choices=[], validators=[validators.DataRequired()])
+    district_id = SelectField('ເມືອງ', choices=[], validators=[validators.DataRequired()])
+    village_id = SelectField('ບ້ານ', choices=[], validators=[validators.DataRequired()])
+    date_birth = DateField('ວັນເດືອນປິເກິດ', [validators.DataRequired()])
 
     def dropface(self, filename):
         path = os.path.join('static', 'data', str(session['regster_code']), filename)
@@ -25,14 +39,7 @@ class RegisterForm(Form):
         for (x, y, w, h) in faces:
             try:
                 cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                img = cv2.resize(gray[y:y + h+20, x:x + w+20], (200, 200))
+                img = cv2.resize(gray[y:y + h + 20, x:x + w + 20], (200, 200))
                 cv2.imwrite(os.path.join('static', 'data', str(session['regster_code']), filename), img)
             except:
                 print('Error')
-
-
-class Register(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.Integer)
-    first_name = db.Column(db.String(500))
-    last_name = db.Column(db.String(500))

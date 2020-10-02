@@ -17,7 +17,7 @@ from werkzeug.utils import secure_filename
 detect_route = Blueprint('detect_route', __name__)
 pridectcamera = CameraDetect()
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-webcam_id = 1
+webcam_id = 0
 
 
 def allowed_file(filename):
@@ -40,6 +40,8 @@ def genDetect(camera):
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        if camera.img_detect:
+            exit()
 
 
 @detect_route.route('/video_detect')
@@ -67,10 +69,10 @@ def uploadfiledetect():
         img = os.path.join('static', 'photos', 'detect', filename)
         # setdatacamera.drop(path, filename)
         try:
-            pridectcamera.dropface(img)
-            # print('No drop face')
+            #pridectcamera.dropface(img)
+            print('No drop face use Oraginal')
         except:
-            print('No face drop')
+            print('Errors No face drop')
         pridectcamera.img_detect = filename
         success = True
     if success:

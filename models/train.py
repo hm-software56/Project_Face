@@ -27,15 +27,18 @@ class Traindata(object):
         known_face_ids = []
         person_codes = []
         try:
-            model = Register.query.all()
+            """model = Register.query.all()
             for register in model:
-                person_codes.append(register.code)
+                person_codes.append(register.code)"""
 
-            # person_ids = load('data_trained/news_dataset_ids.npy').tolist()
+            new_face_codes = load(os.path.join('static', 'dataset_model', 'new_face_ids.npy')).tolist()
+            person_codes = new_face_codes
 
             for face_code in os.listdir(os.path.join('static', 'data')):
                 if int(face_code) in person_codes:
-                    print(face_code)
+                    for file_name in os.listdir(os.path.join('static', 'data', face_code)):
+                        self.dropface(face_code, file_name)
+
                     path = [os.path.join(os.path.join('static', 'data', face_code), f) for f in
                             os.listdir(os.path.join('static', 'data', face_code))]
                     for image in path:
@@ -50,33 +53,55 @@ class Traindata(object):
                 else:
                     print('No data set to train face_code match')
             if known_face_ids:
-                save('data_trained/all_data_trainer_faces.npy', known_face_encodings)
-                save('data_trained/all_data_trainer_ids.npy', known_face_ids)
-                #save('data_trained/new_data_trainer_faces.npy', known_face_encodings)
-                #save('data_trained/new_data_trainer_ids.npy', known_face_ids)
+                # save('data_trained/all_data_trainer_faces.h5', known_face_encodings)
+                # save('data_trained/all_data_trainer_ids.h5', known_face_ids)
+                save(os.path.join('static', 'dataset_model', 'new_data_trainer_faces.npy'), known_face_encodings)
+                save(os.path.join('static', 'dataset_model', 'new_data_trainer_ids.npy'), known_face_ids)
 
-            """try:
-                new_face_encodings = load('data_trained/new_data_trainer_faces.npy').tolist()
-                new_face_ids = load('data_trained/new_data_trainer_ids.npy').tolist()
+            try:
+                new_face_encodings = load(
+                    os.path.join('static', 'dataset_model', 'new_data_trainer_faces.npy')).tolist()
+                new_face_ids = load(os.path.join('static', 'dataset_model', 'new_data_trainer_ids.npy')).tolist()
 
-                face_encodings = load('data_trained/all_data_trainer_faces.npy').tolist()
+                face_encodings = load(os.path.join('static', 'dataset_model', 'all_data_trainer_faces.npy')).tolist()
                 face_encodings = face_encodings + new_face_encodings
-                face_ids = load('data_trained/all_data_trainer_ids.npy').tolist()
+                face_ids = load(os.path.join('static', 'dataset_model', 'all_data_trainer_ids.npy')).tolist()
                 face_ids = face_ids + new_face_ids
 
-                save('data_trained/all_data_trainer_faces.npy', face_encodings)
-                save('data_trained/all_data_trainer_ids.npy', face_ids)
+                save(os.path.join('static', 'dataset_model', 'all_data_trainer_faces.npy'), face_encodings)
+                save(os.path.join('static', 'dataset_model', 'all_data_trainer_ids.npy'), face_ids)
 
-                os.remove('data_trained/new_data_trainer_faces.npy')
-                os.remove('data_trained/new_data_trainer_ids.npy')
-                os.remove('data_trained/news_dataset_ids.npy')
+                os.remove(os.path.join('static', 'dataset_model', 'new_data_trainer_faces.npy'))
+                os.remove(os.path.join('static', 'dataset_model', 'new_data_trainer_ids.npy'))
+                os.remove(os.path.join('static', 'dataset_model', 'new_face_ids.npy'))
             except:
-                save('data_trained/all_data_trainer_faces.npy', known_face_encodings)
-                save('data_trained/all_data_trainer_ids.npy', known_face_ids)
+                save(os.path.join('static', 'dataset_model', 'all_data_trainer_faces.npy'), known_face_encodings)
+                save(os.path.join('static', 'dataset_model', 'all_data_trainer_ids.npy'), known_face_ids)
 
-                os.remove('data_trained/new_data_trainer_faces.npy')
-                os.remove('data_trained/new_data_trainer_ids.npy')
-                os.remove('data_trained/news_dataset_ids.npy')"""
+                os.remove(os.path.join('static', 'dataset_model', 'new_data_trainer_faces.npy'))
+                os.remove(os.path.join('static', 'dataset_model', 'new_data_trainer_ids.npy'))
+                os.remove(os.path.join('static', 'dataset_model', 'new_face_ids.npy'))
         except:
             print('No data set to train list in file')
         # return known_face_ids, known_face_encodings
+
+    def dropface(self, regster_code, filename):
+        path = os.path.join('static', 'data', regster_code, filename)
+        name_new = 'face_' + filename
+        image = cv2.imread(path)
+        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        image = cv2.flip(image, 1)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        if len(faces) > 0:
+            for (x, y, w, h) in faces:
+                try:
+                    cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
+                    img = cv2.resize(gray[y:y + h + 20, x:x + w + 20], (200, 200))
+                    cv2.imwrite(os.path.join('static', 'data', regster_code, name_new), img)
+                    os.remove(os.path.join('static', 'data', regster_code, filename))
+                except:
+                    print('Error')
+        else:
+            if filename[0:4] != 'face':
+                os.remove(os.path.join('static', 'data', regster_code, filename))
