@@ -1,25 +1,45 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <th>ລະຫັດ</th>
-        <th>ຮູບພາບ</th>
-        <th>ຊື່ ແລະ ນາມສະກຸນ</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% if list_person %}
-        {% for k, v in list_person.items() %}
-            <tr>
-                <td width="20">{{ k }}</td>
-                <td width="150"><img src="static\data_person\{{ k }}\1.jpg" class="rounded img-fluid"></td>
-                <td>{{ v }}</td>
-            </tr>
-        {% endfor %}
-    {% else %}
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
         <tr>
-            <td colspan="3" class="text-center text-danger font-weight-bold">ບໍ່ພົບຂໍ້ມູນ</td>
+            <th class="text-center">ຮູບພາບ</th>
+            <th colspan="2" class="text-center">ລາຍລະອຽດ</th>
         </tr>
-    {% endif %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% if model %}
+            {% for data in model %}
+                <tr>
+                    <td width="150"><img src="static\data_person\{{ data.code }}\1.jpg" class="rounded img-fluid"></td>
+                    <td class="p-0">
+                        <table class="table table-hover mb-0">
+                            <tr>
+                                <td width="10">ຊື່:</td>
+                                <td>{{ data.first_name }} {{ data.last_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>ແຂວງ:</td>
+                                <td> {{ data.pro_name_la }}</td>
+                            </tr>
+                            <tr>
+                                <td>ເມືອງ:</td>
+                                <td>{{ data.dis_name_la }}</td>
+                            </tr>
+                            <tr>
+                                <td>ບ້ານ:</td>
+                                <td>{{ data.vill_name_la }}</td>
+                            </tr>
+                        </table>
+                    </td>
+
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-center text-danger font-weight-bold">ບໍ່ພົບຂໍ້ມູນ</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>

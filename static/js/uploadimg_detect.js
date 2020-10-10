@@ -21,7 +21,7 @@ $(document).ready(function (e) {
             data: form_data,
             type: 'post',
             beforeSend: function () {
-                $("#result").html('<img src="static/default/loading.gif" class="rounded mx-auto d-block img-thumbnail img-fluid">')
+                $("#result").html('<img src="static/default/loading.gif" class="rounded mx-auto d-block img-thumbnail img-fluid">');
             },
             success: function (data) {
                 $("#result").html(data.result);

@@ -1,7 +1,8 @@
 $(function () {
     $('#predict_webcame').bind('click', function () {
-                   $.ajax({
+        $.ajax({
             url: '/predict?type=webcam',
+            //url: '/predict?type=webcam',
             dataType: "json",
             beforeSend: function () {
                 $("#result").html('<img src="static/default/loading.gif" class="rounded mx-auto d-block img-thumbnail img-fluid">')

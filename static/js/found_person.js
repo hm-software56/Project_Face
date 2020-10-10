@@ -3,8 +3,8 @@ setTimeout(function () {
         url: '/getdata',
         dataType: "json",
         success: function (data) {
-            $("#result_person").html(data.result)
+            $("#result_person").html(data.result);
         },
     });
-    return false
-}, 100000000);
+    return false;
+}, 5000);

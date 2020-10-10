@@ -7,6 +7,7 @@ import face_recognition
 from numpy import asarray
 from numpy import save, load
 from models.register import Register
+from shutil import copyfile
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -36,8 +37,9 @@ class Traindata(object):
 
             for face_code in os.listdir(os.path.join('static', 'data')):
                 if int(face_code) in person_codes:
+                    i = 0
                     for file_name in os.listdir(os.path.join('static', 'data', face_code)):
-                        self.dropface(face_code, file_name)
+                        self.dropface(face_code, file_name, i)
 
                     path = [os.path.join(os.path.join('static', 'data', face_code), f) for f in
                             os.listdir(os.path.join('static', 'data', face_code))]
@@ -85,7 +87,8 @@ class Traindata(object):
             print('No data set to train list in file')
         # return known_face_ids, known_face_encodings
 
-    def dropface(self, regster_code, filename):
+    def dropface(self, regster_code, filename, i):
+        i = i + 1
         path = os.path.join('static', 'data', regster_code, filename)
         name_new = 'face_' + filename
         image = cv2.imread(path)
@@ -95,6 +98,11 @@ class Traindata(object):
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
         if len(faces) > 0:
             for (x, y, w, h) in faces:
+                if i == 1: # Save first image when train use show when detete
+                    path = os.path.join('static', 'data_person', regster_code)
+                    if not os.path.exists(path):
+                        os.makedirs(path)
+                        cv2.imwrite(os.path.join('static', 'data_person', regster_code, '1.jpg'), image)
                 try:
                     cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
                     img = cv2.resize(gray[y:y + h + 20, x:x + w + 20], (200, 200))

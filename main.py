@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,session
 from models.db import db
 from flask_bootstrap import Bootstrap
 from routes.register_route import register_route
@@ -22,9 +22,10 @@ with app.app_context():
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+    session['list_persion_deteted'] = 0 # use for checking when deteted get data to display
     return render_template('index.html', camera='Camera', list_name='')
 
 
 if __name__ == '__main__':
-    #app.run(debug=True)
-    app.run(debug=True, ssl_context='adhoc', host='192.168.43.114')
+    app.run(debug=True)
+    #app.run(debug=True, ssl_context='adhoc', host='192.168.43.114')

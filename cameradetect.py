@@ -8,10 +8,10 @@ import time
 from models.train import Traindata
 from autocrop import Cropper
 from numpy import load
-#from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 from models.register import Register
 
-#db = SQLAlchemy()
+# db = SQLAlchemy()
 root = os.path.dirname(os.path.abspath(__file__))
 
 
