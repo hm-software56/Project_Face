@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+    <div class="container-fluid ">
+        {% include 'navbar.html' %}
+        <div class="col-12 border" id="bg">
+            <div class="row">
+
+                <div class="col-md-12 p-2">
+                    <div class="bg-info text-white text-center rounded-top pt-2 pb-2">
+                        ລາຍຊື່ຂໍ້ມູນບັດປະຈໍາຕົວ
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>ລ/ດ</th>
+                            <th>ທີຢູ່/ລາຍລະອຽດ</th>
+                        </tr>
+                        {% if models %}
+                            {% for data in models %}
+                                <tr>
+                                    <td width="150"><img src="static\data_person\{{ data.code }}\1.jpg"
+                                                         class="rounded img-fluid"></td>
+                                    <td class="p-0">
+                                        <table class="table table-hover mb-0">
+                                            <tr>
+                                                <td width="200" class="text-right">ຊື່:</td>
+                                                <td>{{ data.first_name }} {{ data.last_name }}</td>
+                                                <td rowspan="4" class="text-center" width="100">
+                                                    <a class="btn btn-outline-success" href="{{ url_for('register_route.register',id=data.id) }}"><span class="fa fa-edit"></span></a>
+                                                    <div class="pt-2"></div>
+                                                    <a class="btn btn-outline-primary" href="{{ url_for('register_route.register',id=data.id) }}" ><span class="fa fa-eye"></span></a>
+                                                    <div class="pt-2"></div>
+                                                    <a class="btn btn-outline-danger" href="{{ url_for('register_route.rdel',id=data.id) }}" onclick="return confirm('ທ່ານຕ້ອງການລຶບຂໍ້ມູນທ່ານນີ້ອອກແມ່ນບໍ່.?')"><span class="fa fa-trash"></span></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">ແຂວງ/ເມືອງ/ບ້ານ:</td>
+                                                <td> {{ data.pro_name_la }}, {{ data.dis_name_la }}, {{ data.vill_name_la }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">ເລກບັດປະຈໍາຕົວ/ສໍາມະໂນຄົວ:</td>
+                                                <td>{{ data.card_id }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">ສະຖານທິ່ເຮັດວຽກ/ສືກສາ:</td>
+                                                <td>{{ data.location_name }}, {{ data.section_name }}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                </tr>
+                            {% endfor %}
+
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

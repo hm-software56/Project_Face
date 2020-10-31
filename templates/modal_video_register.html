@@ -16,7 +16,7 @@
                     <div id="container">
                         <canvas class="center-block img-fluid" id="canvasOutput"></canvas>
                         <div id="canvasOutput_done" style="display: none">
-                            <img src="static\default\done.jpg"
+                            <img src="\static\default\done.jpg"
                                  class="mx-auto d-block img-fluid">
                         </div>
 
@@ -144,7 +144,7 @@
         faceVect.delete();
         canvasOutputCtx.drawImage(canvasInput, 0, 0, videoWidth, videoHeight);
         if (face_has == true && number_save <= 100) {
-            Webcam.upload(canvasOutput.toDataURL(), 'captureupload', function (code, text) {
+            Webcam.upload(canvasOutput.toDataURL(), '/captureupload', function (code, text) {
                 console.log('Save successfully img to server');
                 //console.log(text);
             });

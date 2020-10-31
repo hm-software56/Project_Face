@@ -13,7 +13,7 @@ $(document).ready(function (e) {
         }
 
         $.ajax({
-            url: 'uploadfile', // point to server-side URL
+            url: '/uploadfile', // point to server-side URL
             dataType: 'json', // what to expect back from server
             cache: false,
             contentType: false,
@@ -21,11 +21,11 @@ $(document).ready(function (e) {
             data: form_data,
             type: 'post',
             beforeSend: function () {
-                $("#done").html('<img src="static/default/loading.gif" class="rounded mx-auto d-block img-thumbnail img-fluid">')
+                $("#done").html('<img src="/static/default/loading.gif" class="rounded mx-auto d-block img-thumbnail img-fluid">')
                 document.getElementById("close_pr").style.display = 'none';
             },
             success: function (data) {
-                $("#done").html('<img src="static/default/done.jpg" class="rounded mx-auto d-block img-thumbnail img-fluid">')
+                $("#done").html('<img src="/static/default/done.jpg" class="rounded mx-auto d-block img-thumbnail img-fluid">')
                 document.getElementById("next_reg").style.display = 'block';
                 //$('#exampleModal').modal('hide');
                 // $('body').removeClass('modal-open');

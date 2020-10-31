@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div id="particles">
+        <div id="intro" class="h-100">
+            <div class="container-fluid">
+                {% include 'navbar.html' %}
+                <div class="col-12 border" id="bg">
+                    <div class="row">
+                        <div class="col-md-12 p-2">
+                            <div class="bg-info text-white text-center rounded-top pt-2 pb-2">
+                                ລົງທະບຽນຂໍ້ມູນບັດປະຈໍາຕົວ
+                            </div>
+                        </div>
+                        <div class="col-md-12 ">
+                            <fieldset class="scheduler-border">
+                                <legend class="scheduler-border">ວິທີການຕິດຕັ້ງ ແລະ Run</legend>
+                                ຕິດຕັ້ງ Python version 3 ຂື້ນໄປ
+                                <ul>
+                                    <li>
+                                        <a href="https://www.python.org/downloads" target="_blank">ດາວໂຫຼດ Python</a>
+                                    </li>
+                                </ul>
+                                ຕິດຕັ້ງ Library Python
+                                <ul>
+                                    <li>
+                                        <a href="https://pypi.org/project/Flask/" target="_blank">ຕິດຕັ້ງ Flask</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://pypi.org/project/opencv-python/" target="_blank">ຕິດຕັ້ງ
+                                            OpenCV</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://pypi.org/project/Flask-Bootstrap4/" target="_blank">ຕິດຕັ້ງ
+                                            Bootstrap 4</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://pypi.org/project/Flask-WTF/" target="_blank">ຕິດຕັ້ງ Flask
+                                            WTF</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://pypi.org/project/WTForms/" target="_blank">ຕິດຕັ້ງ Flask
+                                            WTForms</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://pypi.org/project/matplotlib/" target="_blank">ຕິດຕັ້ງ
+                                            Matplotlib</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://pypi.org/project/numpy/" target="_blank">ຕິດຕັ້ງ Numpy</a>
+                                    </li>
+                                </ul>
+                                Run Project
+                                <ul>
+                                    <li>
+                                        <a href="https://github.com/ntajxyooj/computer-gv" target="_blank">ດາວໂຫຼດ
+                                            Source
+                                            Code</a>
+                                    </li>
+                                    <li>
+                                        ໃຊ້ commandline(CMD) ເຂົ້າຫາ path ທີເອົາ Source code ເກັບໄວ້ ແລ້ວ run ຄໍາສັ່ງ
+                                        python
+                                        app.py
+                                        <br/>
+                                        <a href="https://flask.palletsprojects.com/en/1.1.x/" target="_blank">ອ່ານເອກະສານເພີ່ມ
+                                            >>></a>
+                                    </li>
+                                </ul>
+                            </fieldset>
+                            <fieldset class="scheduler-border">
+                                <legend class="scheduler-border">Clean ຂໍ້ມູນ ແລະ Reset ຂໍ້ມູນໃໝ່</legend>
+                                <ul>
+                                    <li>
+                                        <a href="{{ url_for('cleanolddata') }}">ກົດ Clean ຂໍ້ມູນ ແລະ Reset ຂໍ້ມູນໃໝ່</a>
+                                    </li>
+                                </ul>
+                            </fieldset>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

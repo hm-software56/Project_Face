@@ -1,5 +1,5 @@
 from wtforms import SubmitField, BooleanField, StringField, PasswordField, validators, IntegerField, SelectField, \
-    DateField
+    DateField, TextAreaField
 from flask import session
 from flask_wtf import FlaskForm
 from models.db import db
@@ -17,7 +17,13 @@ class Register(db.Model):
     province_id = db.Column(db.Integer)
     district_id = db.Column(db.Integer)
     village_id = db.Column(db.Integer)
-    date_birth=db.Column(db.Date)
+    date_birth = db.Column(db.Date)
+    card_id = db.Column(db.String(255))
+    location_name = db.Column(db.String(255))
+    section_name = db.Column(db.String(255))
+    position = db.Column(db.String(255))
+    eduction = db.Column(db.String(255))
+    other = db.Column(db.String(500))
 
 
 class RegisterForm(FlaskForm):
@@ -27,6 +33,12 @@ class RegisterForm(FlaskForm):
     district_id = SelectField('ເມືອງ', choices=[], validators=[validators.DataRequired()])
     village_id = SelectField('ບ້ານ', choices=[], validators=[validators.DataRequired()])
     date_birth = DateField('ວັນເດືອນປິເກິດ', [validators.DataRequired()])
+    card_id = StringField('ເລກບັດປະຈໍາຕົວ/ສໍາມະໂນຄົວ', [validators.DataRequired()])
+    location_name = StringField('ສະຖານທີ່', [validators.DataRequired()])
+    section_name = StringField('ພາກສ່ວນ', [validators.DataRequired()])
+    position = StringField('ຕໍາແໜ່ງ', [validators.DataRequired()])
+    eduction = StringField('ລະດັບການສຶກສາ', [validators.DataRequired()])
+    other = TextAreaField('ລາຍລະອຽດອຶ່ນໆ')
 
     def dropface(self, filename):
         path = os.path.join('static', 'data', str(session['regster_code']), filename)

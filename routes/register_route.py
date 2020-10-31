@@ -1,5 +1,6 @@
 from flask import Flask, render_template, Response, redirect, url_for, request, jsonify, session, Blueprint
 from camera import VideoCamera
+from cameradetect import CameraDetect
 import cv2
 import time
 import os
@@ -10,8 +11,9 @@ from models.register import Register, RegisterForm
 from numpy import save, load
 from werkzeug.utils import secure_filename
 from models.province import Provinces, ListProvince
-from models.district import Districts
-from models.village import Villages
+from models.district import Districts, ListDistrictBy
+from models.village import Villages, ListVillageBy
+import glob
 
 register_route = Blueprint('register_route', __name__)
 setdatacamera = VideoCamera()
@@ -23,27 +25,50 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@register_route.route('/register', methods=['GET', 'POST'])
+@register_route.route('/listregister', methods=['GET', 'POST'])
+def listregister():
+    models = Register.query \
+        .join(Provinces, Provinces.id == Register.province_id) \
+        .join(Districts, Districts.id == Register.district_id) \
+        .join(Villages, Villages.id == Register.village_id) \
+        .add_columns(Register.id, Register.code, Register.first_name, Register.last_name, Provinces.pro_name_la,
+                     Districts.dis_name_la, Villages.vill_name_la, Register.card_id, Register.location_name,
+                     Register.section_name) \
+        .all()
+    return render_template('listregister.html', models=models)
+
+
+@register_route.route('/register/', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm()
-    form.province_id.choices = ListProvince()
-    model = Register.query.order_by(Register.id.desc()).first()
-    if model:
-        code = model.id + 1
-        print(code)
+    CameraDetect().__del__() # Close camera background
+    if request.args.get('id'):
+        id = int(request.args.get('id'))
+        entry = Register.query.get(id)
+        form = RegisterForm(obj=entry)
+        form.province_id.choices = ListProvince()
+        form.district_id.choices = ListDistrictBy(entry.province_id)
+        form.village_id.choices = ListVillageBy(entry.district_id)
     else:
-        code = 1
+        form = RegisterForm()
+        model = Register.query.order_by(Register.id.desc()).first()
+        if model:
+            code = model.id + 1
+            print(code)
+        else:
+            code = 1
+        form.province_id.choices = ListProvince()
     if request.form:
-        check_person = Register.query.filter_by(
+        model_register = Register.query.filter_by(
             first_name=request.form.get('first_name'),
             last_name=request.form.get('last_name'),
             date_birth=request.form.get('date_birth')
         ).first()
-        if check_person:
-            session['regster_code'] = check_person.code
-            Savenewfacecode(check_person.code)
+        if model_register:
+            code = model_register.code
         else:
-            insert = Register(
+            model_register = Register()
+            code = code
+            """insert = Register(
                 first_name=request.form.get('first_name'),
                 last_name=request.form.get('last_name'),
                 code=code,
@@ -51,12 +76,31 @@ def register():
                 district_id=request.form.get('district_id'),
                 village_id=request.form.get('village_id'),
                 date_birth=request.form.get('date_birth'),
-            )
-            db.session.add(insert)
-            db.session.commit()
+                card_id=request.form.get('card_id'),
+                location_name=request.form.get('location_name'),
+                section_name=request.form.get('section_name'),
+                position=request.form.get('position'),
+                eduction=request.form.get('eduction'),
+                other=request.form.get('other'),
+            )"""
+        model_register.first_name = request.form.get('first_name'),
+        model_register.last_name = request.form.get('last_name'),
+        model_register.code = code,
+        model_register.province_id = request.form.get('province_id'),
+        model_register.district_id = request.form.get('district_id'),
+        model_register.village_id = request.form.get('village_id'),
+        model_register.date_birth = request.form.get('date_birth'),
+        model_register.card_id = request.form.get('card_id'),
+        model_register.location_name = request.form.get('location_name'),
+        model_register.section_name = request.form.get('section_name'),
+        model_register.position = request.form.get('position'),
+        model_register.eduction = request.form.get('eduction'),
+        model_register.other = request.form.get('other'),
+        db.session.add(model_register)
+        db.session.commit()
 
-            session['regster_code'] = insert.code
-            Savenewfacecode(insert.code)
+        session['regster_code'] = model_register.code
+        Savenewfacecode(model_register.code)
         if (request.args.get('action') == 'camera'):
             return jsonify(result=render_template('modal_video_register.html'))
         else:
@@ -81,10 +125,11 @@ def uploadfile():
         if not os.path.exists(path):
             os.makedirs(path)
         file.save(os.path.join(path, filename))
-        #RegisterForm().dropface(filename)
+        # RegisterForm().dropface(filename)
         success = True
     if success:
         return jsonify(result=render_template('setdataset.html'))
+
 
 # Create new ids dataset register new use when train
 def Savenewfacecode(face_code):
@@ -132,3 +177,22 @@ def listvillage():
                 option = option + '<option value=' + str(village.id) + '>' + village.vill_name_la + '</option>'
 
     return option
+
+
+@register_route.route('/rdel', methods=['GET', 'POST'])
+def rdel():
+    if request.args.get('id'):
+        id = request.args.get('id')
+        reg = Register.query.filter_by(id=id).first()
+        code = reg.code
+        db.session.delete(reg)
+        db.session.commit()
+        root = os.path.dirname(os.path.abspath(__file__))
+        d = ['data', 'data_person']
+        for dc in d:
+            path = os.path.join(root, '..', 'static', dc, str(code))
+            try:
+                shutil.rmtree(path)
+            except:
+                os.remove(path)
+    return redirect('listregister')

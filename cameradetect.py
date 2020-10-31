@@ -8,6 +8,7 @@ import time
 from models.train import Traindata
 from autocrop import Cropper
 from numpy import load
+import random
 # from flask_sqlalchemy import SQLAlchemy
 from models.register import Register
 
@@ -50,13 +51,19 @@ class CameraDetect(object):
             # Find all the faces and face encodings in the current frame of video
             self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=3)
             self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations)
-
+            found_face = {}
+            count_face_found = len(self.face_encodings)
             for face_encoding in self.face_encodings:
+                count_face_found = count_face_found - 1
                 preson_name = 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'
                 # distance_same_face = False
                 # See if the face is a match for the known face(s)
                 # tolerance=0.4 is distance_same_face
-                matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=0.4)
+                distans = [0.3, 0.4, 0.5]
+                for dst in distans:
+                    matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=dst)
+                    if True in matches:
+                        break
                 face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
                 """j = np.array(face_distances)
                 face_distance_lessthen = np.sort(j[j < 0.1])  #
@@ -81,12 +88,34 @@ class CameraDetect(object):
                     name_id = self.known_face_code[best_match_index]
                     # print(name_id)
                     preson_name = self.labels_name.get(int(name_id))
-
                     list_p = {name_id: preson_name}
                     list_p.update(self.list_name_show)
                     self.list_name_show = list_p
 
-                face_names.append(preson_name)
+                    found_face.update({np.amin(face_distances): name_id})
+                    face_names.append(preson_name)
+
+                else:
+                    found_face.update({random.randint(10, 100): 1000})  # set values to unkwon
+                    face_names.append(preson_name)
+        #print(found_face)
+
+        # use for checking multiperson distances round and get minimum distance
+        i = -1
+        for value, id in found_face.items():
+            i = i + 1
+            if id != 1000:
+                ss = []
+                for v, ids in found_face.items():
+                    if ids != 1000 and id == ids:
+                        ss.append(v)
+                for v, ids in found_face.items():
+                    if ids != 1000:
+                        if id == ids and value == min(ss):
+                            face_names[i] = self.labels_name.get(int(ids))
+                        elif id == ids and value != min(ss):
+                            face_names[i] = 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'
+        # end checking
         for (top, right, bottom, left), name in zip(self.face_locations, face_names):
             # Scale back up face locations since the frame we detected in was scaled to 1/4 size
             top *= 4
