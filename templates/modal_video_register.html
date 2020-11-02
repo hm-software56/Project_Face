@@ -6,7 +6,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <div class="modal-title text-center" id="exampleModalLabel">ລົງໃບໜ້າຂອງທ່ານ</div>
+                <div class="modal-title text-center" id="exampleModalLabel">ລົງໃບໜ້າຂອງທ່ານ - ທ່ານລໍຖ້າ scan ໃບໜ້າໃຫ້ສໍາເລັດ.!</div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -90,6 +90,7 @@
     let canvasBuffer = null;
     let canvasBufferCtx = null;
     let number_save = 0;
+    let saved = true;
 
     function startVideoProcessing() {
         if (!streaming) {
@@ -133,8 +134,14 @@
         size = faceMat.size();
         faceClassifier.detectMultiScale(faceMat, faceVect);
         for (let i = 0; i < faceVect.size(); i++) {
-            number_save = number_save + 1
-            face_has = true;
+            if (saved == true) {
+                number_save = number_save + 1
+                face_has = true;
+                saved = false;
+            } else {
+                face_has = false;
+            }
+
             let face = faceVect.get(i);
             let rect = new cv.Rect(face.x, face.y, face.width, face.height);
             faces.push(rect);
@@ -146,6 +153,10 @@
         if (face_has == true && number_save <= 100) {
             Webcam.upload(canvasOutput.toDataURL(), '/captureupload', function (code, text) {
                 console.log('Save successfully img to server');
+                console.log('text');
+                if (text == "Uploaded") {
+                    saved = true;
+                }
                 //console.log(text);
             });
         } else {

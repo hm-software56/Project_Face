@@ -2,86 +2,94 @@
 
 {% block content %}
     <script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>
-
-    <div class="container-fluid ">
-        {% include 'navbar.html' %}
-        <div class="col-12 border" id="bg">
-            <div class="row">
-                <div class="col-md-6 pt-2">
-                    <div class="bg-info text-white text-center rounded-top">
-                        <div class="col-md-12 p-2">
-                            ສະແດງຜົນ
-                        </div>
-                    </div>
-                    <div class="card border" id="result">
-                        <img src="static\default\no-image.jpg"
-                             class="rounded mx-auto d-block img-thumbnail img-fluid">
-                    </div>
-                    <div class="card border" id="result_output"></div>
-                </div>
-                <div class="col-md-6 pt-2">
+    <div id="particles">
+        <div id="intro" class="h-100">
+            <div class="container-fluid pl-0 pr-0 ">
+                {% include 'navbar.html' %}
+                {% include 'index_full.html' %}
+                <div class="col-12 border" id="bg">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6 pt-2">
                             <div class="bg-info text-white text-center rounded-top">
                                 <div class="col-md-12 p-2">
-                                    ຝືກການຮຽນຮູ້ ແລະ ທົດສອບການຮັບຮູ້
-                                </div>
-                            </div>
-                            <div class="card border pt-1 pl-3 pr-3">
-                                <div class="row pt-3 pb-3">
-                                    <div class="col-md-6 col-sm-12  pt-2">
-                                        <a href="#" class="btn btn-outline-warning btn-block" id="trainer">
-                                            <span class="fa fa-train"></span>
-                                            Train (ຝືກຮຽນຮູ້)
-                                        </a>
-                                    </div>
-
-                                    <div class="col-md-6 col-sm-12 pt-2">
-                                        <div class="btn-block btn-group" role="group"
-                                             aria-label="Button group with nested dropdown">
-                                            <div class="btn-group btn-block" role="group">
-                                                <button id="btnGroupDrop1" type="button"
-                                                        class=" btn-block bg-white text-success btn-outline-success btn  mr-1 dropdown-toggle"
-                                                        data-toggle="dropdown"
-                                                        aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fa fa-user-circle"></i> Detection (ທົດສອບຮັບຮູ້)
-                                                </button>
-                                                <div class="dropdown-menu col" aria-labelledby="btnGroupDrop1">
-                                                    <button type="button"
-                                                            class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
-                                                            id="predict_webcame">
-                                                        <i class="fa fa-camera"></i> ເລືອກ Camera
-                                                    </button>
-
-                                                    <div class="dropdown-divider"></div>
-                                                    <button type="button"
-                                                            class="bg-white text-success btn-outline-success btn dropdown-item"
-                                                            id="predict_img">
-                                                        <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!--<a href="#" class="btn btn-outline-success" id="predict">
-                                            <span class="fa fa-object-group"></span>
-                                            Detection (ທົດສອບ)
-                                        </a>-->
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 pt-3">
-                            <div class="bg-info text-white text-center rounded-top">
-                                <div class="col-md-12 p-2">
-                                    ລາຍງານຂໍ້ມູນຂອງບຸກຄົນທີ່ສະແກນພົບ
-                                    <a href="#" class="float-right text-white" id="clear">
-                                        <span class="fa fa-times-circle"></span>
+                                    ສະແດງຜົນ
+                                    <a id="index_full">
+                                        <il class="fa fa-window-maximize"></il>
                                     </a>
+
                                 </div>
                             </div>
-                            <div id="result_person"></div>
+                            <div class="card border" id="result">
+                                <img src="static\default\no-image.jpg"
+                                     class="rounded mx-auto d-block img-thumbnail img-fluid">
+                            </div>
+                            <div class="card border" id="result_output"></div>
+                        </div>
+                        <div class="col-md-6 pt-2">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="bg-info text-white text-center rounded-top">
+                                        <div class="col-md-12 p-2">
+                                            ຝືກການຮຽນຮູ້ ແລະ ທົດສອບການຮັບຮູ້
+                                        </div>
+                                    </div>
+                                    <div class="card border pt-1 pl-3 pr-3">
+                                        <div class="row pt-3 pb-3">
+                                            <div class="col-md-6 col-sm-12  pt-2">
+                                                <a href="#" class="btn btn-outline-warning btn-block" id="trainer">
+                                                    <span class="fa fa-train"></span>
+                                                    Train (ຝືກຮຽນຮູ້)
+                                                </a>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-12 pt-2">
+                                                <div class="btn-block btn-group" role="group"
+                                                     aria-label="Button group with nested dropdown">
+                                                    <div class="btn-group btn-block" role="group">
+                                                        <button id="btnGroupDrop1" type="button"
+                                                                class=" btn-block bg-white text-success btn-outline-success btn  mr-1 dropdown-toggle"
+                                                                data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fa fa-user-circle"></i> Detection (ທົດສອບຮັບຮູ້)
+                                                        </button>
+                                                        <div class="dropdown-menu col" aria-labelledby="btnGroupDrop1">
+                                                            <button type="button"
+                                                                    class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
+                                                                    id="predict_webcame">
+                                                                <i class="fa fa-camera"></i> ເລືອກ Camera
+                                                            </button>
+
+                                                            <div class="dropdown-divider"></div>
+                                                            <button type="button"
+                                                                    class="bg-white text-success btn-outline-success btn dropdown-item"
+                                                                    id="predict_img">
+                                                                <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--<a href="#" class="btn btn-outline-success" id="predict">
+                                                    <span class="fa fa-object-group"></span>
+                                                    Detection (ທົດສອບ)
+                                                </a>-->
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 pt-3">
+                                    <div class="bg-info text-white text-center rounded-top">
+                                        <div class="col-md-12 p-2">
+                                            ລາຍງານຂໍ້ມູນຂອງບຸກຄົນທີ່ສະແກນພົບ
+                                            <a href="#" class="float-right text-white" id="clear">
+                                                <span class="fa fa-times-circle"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="result_person"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

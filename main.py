@@ -29,6 +29,10 @@ def index():
     session['list_persion_deteted'] = 0  # use for checking when deteted get data to display
     return render_template('index.html', camera='Camera', list_name='')
 
+@app.route('/indexfull', methods=['POST', 'GET'])
+def indexfull():
+    return 'aaaaaaaaaaaa'
+
 
 @app.route('/install', methods=['POST', 'GET'])
 def install():
@@ -53,5 +57,5 @@ def cleanolddata():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    #app.run(debug=True, ssl_context='adhoc', host='192.168.43.114')
+    #app.run(debug=True)
+    app.run(debug=False, ssl_context='adhoc', host='192.168.50.112')
