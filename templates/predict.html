@@ -1,3 +1,10 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>
 <!-- time use for ajax refrest show img -->
-<img id="bg" src="{{ url_for('detect_route.video_detect',time=time) }}" class="img-fluid img-rounded">
+<script>
+    function loadImage() {
+        document.getElementById('hd').style.display = 'none';
+    }
+</script>
+<img id="bg" src="{{ url_for('detect_route.video_detect',time=time) }}" class=" img-fluid img-rounded"
+     onload="loadImage()">
+<img id="hd" src="/static/default/loading.gif" class="img-fluid img-rounded"/>

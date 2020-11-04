@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+    <div id="particles">
+        <div id="intro">
+            <div class="container-fluid h-100">
+                <div class="d-flex justify-content-center h-100">
+                    <div class="user_card">
+                        <div class="d-flex justify-content-center">
+                            <div class="brand_logo_container">
+                                <img src="/static/default/icon.png"
+                                     class="brand_logo" alt="Logo">
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex justify-content-center form_container">
+                            <div class="row">
+                                <div class="col-sm-12 text-center text-white mb-5 font-weight-bold">
+                                    <span class="text">AI ຮັບຮູ້ຈົດຈໍາໃບໜ້າ</span>
+                                </div>
+                                <div class="col-sm-12">
+                                    <form method=post>
+                                        {{ form.hidden_tag() }}
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            </div>
+                                            <input required type="text" name="username" class="form-control input_user" value=""
+                                                   placeholder="ຊື່ເຂົ້າລະບົບ">
+                                        </div>
+                                        <div class="input-group mb-2">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                            </div>
+                                            <input required type="password" name="password" class="form-control input_pass"
+                                                   value=""
+                                                   placeholder="ລະຫັດຜ່ານ">
+                                        </div>
+                                        <div class="d-flex justify-content-center mt-4 login_container">
+                                            <button type="submit" name="button" class="btn login_btn">
+                                                <il class="fa fa-lock"></il>
+                                                ເຂົ້າລະບົບ
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

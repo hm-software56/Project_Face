@@ -35,46 +35,74 @@
                                     </div>
                                     <div class="card border pt-1 pl-3 pr-3">
                                         <div class="row pt-3 pb-3">
-                                            <div class="col-md-6 col-sm-12  pt-2">
-                                                <a href="#" class="btn btn-outline-warning btn-block" id="trainer">
-                                                    <span class="fa fa-train"></span>
-                                                    Train (ຝືກຮຽນຮູ້)
-                                                </a>
-                                            </div>
+                                            {% if session['login'] and session['login']['type']=="Admin" %}
+                                                <div class="col-md-6 col-sm-12  pt-2">
+                                                    <a href="#" class="btn btn-outline-warning btn-block" id="trainer">
+                                                        <span class="fa fa-train"></span>
+                                                        Train (ຝືກຮຽນຮູ້)
+                                                    </a>
+                                                </div>
 
-                                            <div class="col-md-6 col-sm-12 pt-2">
-                                                <div class="btn-block btn-group" role="group"
-                                                     aria-label="Button group with nested dropdown">
-                                                    <div class="btn-group btn-block" role="group">
-                                                        <button id="btnGroupDrop1" type="button"
-                                                                class=" btn-block bg-white text-success btn-outline-success btn  mr-1 dropdown-toggle"
-                                                                data-toggle="dropdown"
-                                                                aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fa fa-user-circle"></i> Detection (ທົດສອບຮັບຮູ້)
-                                                        </button>
-                                                        <div class="dropdown-menu col" aria-labelledby="btnGroupDrop1">
-                                                            <button type="button"
-                                                                    class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
-                                                                    id="predict_webcame">
-                                                                <i class="fa fa-camera"></i> ເລືອກ Camera
+                                                <div class="col-md-6 col-sm-12 pt-2">
+                                                    <div class="btn-block btn-group" role="group"
+                                                         aria-label="Button group with nested dropdown">
+                                                        <div class="btn-group btn-block" role="group">
+                                                            <button id="btnGroupDrop1" type="button"
+                                                                    class=" btn-block bg-white text-success btn-outline-success btn  mr-1 dropdown-toggle"
+                                                                    data-toggle="dropdown"
+                                                                    aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-user-circle"></i> Detection
+                                                                (ທົດສອບຮັບຮູ້)
                                                             </button>
+                                                            <div class="dropdown-menu col"
+                                                                 aria-labelledby="btnGroupDrop1">
+                                                                <button type="button"
+                                                                        class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
+                                                                        id="predict_webcame">
+                                                                    <i class="fa fa-camera"></i> ເລືອກ Camera
+                                                                </button>
 
-                                                            <div class="dropdown-divider"></div>
-                                                            <button type="button"
-                                                                    class="bg-white text-success btn-outline-success btn dropdown-item"
-                                                                    id="predict_img">
-                                                                <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
-                                                            </button>
+                                                                <div class="dropdown-divider"></div>
+                                                                <button type="button"
+                                                                        class="bg-white text-success btn-outline-success btn dropdown-item"
+                                                                        id="predict_img">
+                                                                    <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            {% else %}
+                                                <div class="col-md-12 col-sm-12 pt-2">
+                                                    <div class="btn-block btn-group" role="group"
+                                                         aria-label="Button group with nested dropdown">
+                                                        <div class="btn-group btn-block" role="group">
+                                                            <button id="btnGroupDrop1" type="button"
+                                                                    class=" btn-block bg-white text-success btn-outline-success btn  mr-1 dropdown-toggle"
+                                                                    data-toggle="dropdown"
+                                                                    aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-user-circle"></i> Detection
+                                                                (ທົດສອບຮັບຮູ້)
+                                                            </button>
+                                                            <div class="dropdown-menu col"
+                                                                 aria-labelledby="btnGroupDrop1">
+                                                                <button type="button"
+                                                                        class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
+                                                                        id="predict_webcame">
+                                                                    <i class="fa fa-camera"></i> ເລືອກ Camera
+                                                                </button>
 
-                                                <!--<a href="#" class="btn btn-outline-success" id="predict">
-                                                    <span class="fa fa-object-group"></span>
-                                                    Detection (ທົດສອບ)
-                                                </a>-->
-                                            </div>
-
+                                                                <div class="dropdown-divider"></div>
+                                                                <button type="button"
+                                                                        class="bg-white text-success btn-outline-success btn dropdown-item"
+                                                                        id="predict_img">
+                                                                    <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

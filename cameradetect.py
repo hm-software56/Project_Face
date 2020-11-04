@@ -98,7 +98,7 @@ class CameraDetect(object):
                 else:
                     found_face.update({random.randint(10, 100): 1000})  # set values to unkwon
                     face_names.append(preson_name)
-        #print(found_face)
+        # print(found_face)
 
         # use for checking multiperson distances round and get minimum distance
         i = -1

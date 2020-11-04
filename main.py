@@ -1,13 +1,15 @@
-from flask import Flask, render_template, session,redirect
+from flask import Flask, render_template, session, redirect, request, url_for
 from models.db import db
 from flask_bootstrap import Bootstrap
 from routes.register_route import register_route
 from routes.detect_route import detect_route
 from routes.training_route import training_route
+from routes.user_route import user_route
 import os
 import shutil
 import glob
 from models.register import Register
+from models.user import checkLogin
 
 app = Flask(__name__)
 app.secret_key = "daxiong123zzzzzz"
@@ -15,6 +17,7 @@ Bootstrap(app)
 app.register_blueprint(register_route)
 app.register_blueprint(detect_route)
 app.register_blueprint(training_route)
+app.register_blueprint(user_route)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Da123!@#@localhost/face_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -24,10 +27,27 @@ with app.app_context():
     db.create_all()
 
 
+@app.before_request
+def before_request_func():
+    if checkLogin() == False:
+        url = str(request.url_rule)
+        if not url in '/login' and '/static/' not in request.path:
+            return redirect(url_for('user_route.login'))
+
+        # if request.script_root != "/static":
+        #    print(request.script_root)
+
+
 @app.route('/', methods=['POST', 'GET'])
+def home():
+    return redirect('index')
+
+
+@app.route('/index', methods=['POST', 'GET'])
 def index():
     session['list_persion_deteted'] = 0  # use for checking when deteted get data to display
     return render_template('index.html', camera='Camera', list_name='')
+
 
 @app.route('/indexfull', methods=['POST', 'GET'])
 def indexfull():
@@ -57,5 +77,5 @@ def cleanolddata():
 
 
 if __name__ == '__main__':
-    #app.run(debug=True)
-    app.run(debug=False, ssl_context='adhoc', host='192.168.50.112')
+    app.run(debug=True)
+    #app.run(debug=False, ssl_context='adhoc', host='192.168.100.247',port='2020')

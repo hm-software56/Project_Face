@@ -24,7 +24,6 @@ webcam_id = 1
 root = os.path.dirname(os.path.abspath(__file__))
 
 
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -120,10 +119,8 @@ def getdata():
     else:
         return 'No new Detetd new person'
 
+
 @detect_route.route('/aa', methods=['GET'])
 def aa():
-    path = os.path.join('static', 'default', 'loading.gif')
-    print(os.path.join('static', 'data', '12', 'face_images_2.jpg'))
-    shutil.copy2(os.path.join('static', 'data', '12', 'face_images_2.jpg'),
-                 os.path.join('static', 'data_person', '12'))
-    # return send_file(path, mimetype='image/gif')
+    path = os.path.join(root, 'static', 'photos', 'detect', 'name')
+    return path
