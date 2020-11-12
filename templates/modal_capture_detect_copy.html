@@ -1,0 +1,72 @@
+<script>
+    $('#modal_capture').modal('show');
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/webcam.js') }}"></script>
+<script language="JavaScript">
+
+    // Configure a few settings and attach camera
+
+    Webcam.set({
+        width: 640,
+        height: 400,
+        dest_width: 640,
+        dest_height: 400,
+        image_format: 'jpeg',
+        jpeg_quality: 90,
+        w_p:540,
+        h_p:340,
+    });
+    Webcam.attach('#my_camera');
+
+    function take_snapshot() {
+        // take snapshot and get image data
+        Webcam.snap(function (data_uri) {
+            document.getElementById('results').innerHTML = '<img id="imageprev" src="' + data_uri + '"/>';
+        });
+
+        var base64image = document.getElementById("imageprev").src;
+        Webcam.upload(base64image, 'capturepridict', function (code, text) {
+            console.log('Save successfully');
+            $.ajax({
+                url: '/capturepridict',
+                dataType: "json",
+                beforeSend: function () {
+                    $("#result").html('<img src="static/default/loading.gif" class="rounded mx-auto d-block img-thumbnail img-fluid">')
+                },
+                success: function (text) {
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop.show').css('opacity', '0');
+                    $('.modal-backdrop').css('z-index', '-1');
+                    $("#result").html(text.result)
+                },
+            });
+            return false;
+        });
+
+    }
+
+</script>
+<div class="modal fade" id="modal_capture" tabindex="-1" role="dialog" aria-labelledby="modal_capture"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="my_camera"></div>
+                <div id="results" style="display: none"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">
+                    <button class="btn btn-outline-success" onClick="take_snapshot()">
+                        <span class="fa fa-camera-retro"></span> ປະມວນຮັບຮູ້
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

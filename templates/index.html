@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>
+    <!--<script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>-->
     <div id="particles">
         <div id="intro" class="h-100">
             <div class="container-fluid pl-0 pr-0 ">
@@ -13,10 +13,6 @@
                             <div class="bg-info text-white text-center rounded-top">
                                 <div class="col-md-12 p-2">
                                     ສະແດງຜົນ
-                                    <a id="index_full">
-                                        <il class="fa fa-window-maximize"></il>
-                                    </a>
-
                                 </div>
                             </div>
                             <div class="card border" id="result">
@@ -46,7 +42,7 @@
                                                 <div class="col-md-6 col-sm-12 pt-2">
                                                     <div class="btn-block btn-group" role="group"
                                                          aria-label="Button group with nested dropdown">
-                                                        <div class="btn-group btn-block" role="group">
+                                                        <div class="test btn-group btn-block" role="group">
                                                             <button id="btnGroupDrop1" type="button"
                                                                     class=" btn-block bg-white text-success btn-outline-success btn  mr-1 dropdown-toggle"
                                                                     data-toggle="dropdown"
@@ -58,15 +54,21 @@
                                                                  aria-labelledby="btnGroupDrop1">
                                                                 <button type="button"
                                                                         class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
+                                                                        id="predict_capture">
+                                                                    <i class="fa fa-camera"></i> ກວດສອບຮັບຮູ້ດ້ວຍ Camera
+                                                                </button>
+                                                                <div class="dropdown-divider"></div>
+                                                                <button type="button"
+                                                                        class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
                                                                         id="predict_webcame">
-                                                                    <i class="fa fa-camera"></i> ເລືອກ Camera
+                                                                    <i class="fa fa-video"></i> ກວດສອບຮັບຮູ້ດ້ວຍ Real-time
                                                                 </button>
 
                                                                 <div class="dropdown-divider"></div>
                                                                 <button type="button"
                                                                         class="bg-white text-success btn-outline-success btn dropdown-item"
                                                                         id="predict_img">
-                                                                    <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
+                                                                    <i class="fa fa-images"></i> ກວດສອບຮັບຮູ້ດ້ວຍ ຮູບພາບ
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -76,7 +78,7 @@
                                                 <div class="col-md-12 col-sm-12 pt-2">
                                                     <div class="btn-block btn-group" role="group"
                                                          aria-label="Button group with nested dropdown">
-                                                        <div class="btn-group btn-block" role="group">
+                                                        <div class="test btn-group btn-block" role="group">
                                                             <button id="btnGroupDrop1" type="button"
                                                                     class=" btn-block bg-white text-success btn-outline-success btn  mr-1 dropdown-toggle"
                                                                     data-toggle="dropdown"
@@ -88,15 +90,21 @@
                                                                  aria-labelledby="btnGroupDrop1">
                                                                 <button type="button"
                                                                         class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
+                                                                        id="predict_capture">
+                                                                    <i class="fa fa-camera"></i> ກວດສອບຮັບຮູ້ດ້ວຍ Camera
+                                                                </button>
+                                                                <div class="dropdown-divider"></div>
+                                                                <button type="button" disabled
+                                                                        class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
                                                                         id="predict_webcame">
-                                                                    <i class="fa fa-camera"></i> ເລືອກ Camera
+                                                                    <i class="fa fa-video"></i> ກວດສອບຮັບຮູ້ດ້ວຍ Real-time
                                                                 </button>
 
                                                                 <div class="dropdown-divider"></div>
                                                                 <button type="button"
                                                                         class="bg-white text-success btn-outline-success btn dropdown-item"
                                                                         id="predict_img">
-                                                                    <i class="fa fa-images"></i> ເລືອກ ຮູບພາບ
+                                                                    <i class="fa fa-images"></i> ກວດສອບຮັບຮູ້ດ້ວຍ ຮູບພາບ
                                                                 </button>
                                                             </div>
                                                         </div>

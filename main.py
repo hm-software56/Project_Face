@@ -10,7 +10,7 @@ import shutil
 import glob
 from models.register import Register
 from models.user import checkLogin
-
+import random
 app = Flask(__name__)
 app.secret_key = "daxiong123zzzzzz"
 Bootstrap(app)
@@ -45,7 +45,12 @@ def home():
 
 @app.route('/index', methods=['POST', 'GET'])
 def index():
-    session['list_persion_deteted'] = 0  # use for checking when deteted get data to display
+    # use for checking when deteted get data to display
+    try:
+        #session['generate_camera_id']
+        session['generate_camera_id'] = random.randint(000000, 999999)
+    except:
+        session['generate_camera_id']=random.randint(000000,999999)
     return render_template('index.html', camera='Camera', list_name='')
 
 
@@ -76,6 +81,11 @@ def cleanolddata():
     return redirect('install')
 
 
+@app.route('/jswebcam', methods=['POST', 'GET'])
+def jswebcam():
+    return render_template('js_webcam_copy.html')
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
-    #app.run(debug=False, ssl_context='adhoc', host='192.168.100.247',port='2020')
+    #app.run(debug=True)
+    app.run(debug=False, ssl_context='adhoc', host='192.168.100.247',port='2020')

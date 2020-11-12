@@ -38,28 +38,21 @@
         Webcam.snap(function (data_uri) {
             document.getElementById('results').innerHTML = '<img id="imageprev" src="' + data_uri + '"/>';
         });
-        timeout()
 
-        var base64image = document.getElementById("imageprev").src;
-        Webcam.upload(base64image, 'jswebcamupload', function (code, text) {
-            console.log('Save successfully');
-            //console.log(text);
-        });
-        //Webcam.reset();
     }
 
-    function timeout() {
+    /*function timeout() {
         setTimeout(function () {
             take_snapshot()
             timeout();
         }, 400);
-    }
+    }*/
 
-    setTimeout(function () {
+    /*setTimeout(function () {
         timeout()
-    }, 1000);
+    }, 1000);*/
 
-    /*function saveSnap() {
+    function saveSnap() {
         // Get base64 value from <img id='imageprev'> source
         var base64image = document.getElementById("imageprev").src;
 
@@ -68,5 +61,5 @@
             //console.log(text);
         });
 
-    }*/
+    }
 </script>

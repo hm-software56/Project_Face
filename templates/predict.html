@@ -3,6 +3,16 @@
 <script>
     function loadImage() {
         document.getElementById('hd').style.display = 'none';
+        setTimeout(function () {
+            $.ajax({
+                url: '/getdata',
+                dataType: "json",
+                success: function (data) {
+                    $("#result_person").html(data.result);
+                },
+            });
+            return false;
+        }, 1000);
     }
 </script>
 <img id="bg" src="{{ url_for('detect_route.video_detect',time=time) }}" class=" img-fluid img-rounded"

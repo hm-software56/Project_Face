@@ -1,4 +1,20 @@
 $(function () {
+    $('#predict_capture').bind('click', function () {
+        $.ajax({
+            url: '/predict?type=capture',
+            //url: '/predict?type=webcam',
+            dataType: "json",
+            beforeSend: function () {
+                $("#result").html('<img src="static/default/loading.gif" class="rounded mx-auto d-block img-thumbnail img-fluid">');
+            },
+            success: function (data) {
+                $("#result").html(data.result)
+                document.getElementById('name').value = '';
+            },
+        });
+        return false;
+    });
+
     $('#predict_webcame').bind('click', function () {
         $.ajax({
             url: '/predict?type=webcam',
@@ -106,7 +122,7 @@ function uploaimg(theForm) {
             $("#result").html('<img src="static/default/loading.gif" class="rounded mx-auto d-block img-thumbnail img-fluid">')
         },
         success: function (data) {
-            $("#result").html(data.result)
+            $("#result").html(data.result);
         }
     });
 }

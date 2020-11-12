@@ -11,7 +11,6 @@ from numpy import load
 import random
 # from flask_sqlalchemy import SQLAlchemy
 from models.register import Register
-
 # db = SQLAlchemy()
 root = os.path.dirname(os.path.abspath(__file__))
 
@@ -49,8 +48,9 @@ class CameraDetect(object):
         face_names = []
         if self.process_this_frame:
             # Find all the faces and face encodings in the current frame of video
-            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=3)
-            self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations)
+            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=3,model='hog')
+            self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations, num_jitters=1,
+                                                                  model='small')
             found_face = {}
             count_face_found = len(self.face_encodings)
             for face_encoding in self.face_encodings:

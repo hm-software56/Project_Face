@@ -5,6 +5,7 @@ from models.register import Register
 from models.province import Provinces
 from models.district import Districts
 from models.village import Villages
+from models.listfounddected import SaveFound, ListFound
 import cv2
 from random import choice
 import time
@@ -20,7 +21,7 @@ from werkzeug.utils import secure_filename
 detect_route = Blueprint('detect_route', __name__)
 pridectcamera = CameraDetect()
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-webcam_id = 1
+webcam_id = 0
 root = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -33,13 +34,14 @@ def captureupload():
     if request.files.get('webcam'):
         file = request.files.get('webcam')
         filename = str(randint(1000000000, 9999999999)) + '.jpg'
-        path = os.path.join('static', 'photo', 'detect')
+        path = os.path.join('static', 'photos', 'detect')
         if not os.path.exists(path):
             os.makedirs(path)
         file.save(os.path.join(path, filename))
-        return render_template('predict.html')
+        pridectcamera.img_detect = filename
+        return True
     else:
-        return jsonify(result=render_template('js_webcam.html'))
+        return jsonify(result=render_template('predict.html', time=time.time()))
 
 
 @detect_route.route('/predict')
@@ -47,6 +49,8 @@ def predict():
     pridectcamera.loadLabelName()
     if request.args.get('type') == 'img':
         return jsonify(result=render_template('modal_upload_detect.html'))
+    elif request.args.get('type') == 'capture':
+        return jsonify(result=render_template('modal_capture_detect.html'))
     else:
         pridectcamera.img_detect = ''
         return jsonify(result=render_template('predict.html', time=time.time()))
@@ -62,7 +66,7 @@ def genDetect(camera):
             break
 
 
-@detect_route.route('/video_detect')
+@detect_route.route('/video_detect', methods=['GET', 'POST'])
 def video_detect():
     return Response(genDetect(pridectcamera),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -93,6 +97,7 @@ def uploadfiledetect():
             print('Errors No face drop')
         pridectcamera.img_detect = filename
         success = True
+
     if success:
         return jsonify(result=render_template('predict.html', time=time.time()))
 
@@ -101,24 +106,22 @@ def uploadfiledetect():
 def getdata():
     if request.args.get('clear'):
         pridectcamera.list_name_show.clear()
-    if len(pridectcamera.list_name_show) != session['list_persion_deteted']:
-        session['list_persion_deteted'] = len(pridectcamera.list_name_show)
-        person_ids = [];
+    if pridectcamera.list_name_show:
         for person_id in pridectcamera.list_name_show:
-            person_ids.append(person_id)
+            SaveFound(person_id, session['generate_camera_id'])
+        pridectcamera.list_name_show.clear()
+
         model = Register.query \
             .join(Provinces, Provinces.id == Register.province_id) \
             .join(Districts, Districts.id == Register.district_id) \
             .join(Villages, Villages.id == Register.village_id) \
+            .join(ListFound, ListFound.person_id == Register.code) \
             .add_columns(Register.id, Register.code, Register.first_name, Register.last_name, Provinces.pro_name_la,
-                         Districts.dis_name_la, Villages.vill_name_la) \
-            .filter(Register.code.in_(person_ids)).all()
-        print(len(model))
-        return jsonify(
-            result=render_template('persion_detail.html', model=model, list_person=pridectcamera.list_name_show))
+                         Districts.dis_name_la, Villages.vill_name_la, ListFound.camera_id, ListFound.camera_id) \
+            .filter(ListFound.camera_id.in_([session['generate_camera_id']])).order_by(ListFound.id.desc()).all()
+        return jsonify(result=render_template('persion_detail.html', model=model))
     else:
         return 'No new Detetd new person'
-
 
 @detect_route.route('/aa', methods=['GET'])
 def aa():

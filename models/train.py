@@ -46,7 +46,8 @@ class Traindata(object):
                     for image in path:
                         try:
                             image_load = face_recognition.load_image_file(image)
-                            image_encoding = face_recognition.face_encodings(image_load)[0]
+                            image_encoding = face_recognition.face_encodings(image_load, num_jitters=1, model='large')[
+                                0]
                             known_face_encodings.append(image_encoding)
                             known_face_ids.append(face_code)
                         except:
@@ -94,18 +95,18 @@ class Traindata(object):
         image = cv2.imread(path)
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         image = cv2.flip(image, 1)
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(image, 1.3, 5)
         if len(faces) > 0:
             for (x, y, w, h) in faces:
-                if i == 1: # Save first image when train use show when detete
+                if i == 1:  # Save first image when train use show when detete
                     path = os.path.join('static', 'data_person', regster_code)
                     if not os.path.exists(path):
                         os.makedirs(path)
                         cv2.imwrite(os.path.join('static', 'data_person', regster_code, '1.jpg'), image)
                 try:
-                    cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                    img = cv2.resize(gray[y:y + h + 20, x:x + w + 20], (200, 200))
+                    #cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
+                    img = cv2.resize(image[y:y + h + 20, x:x + w + 20], (200, 200))
                     cv2.imwrite(os.path.join('static', 'data', regster_code, name_new), img)
                     os.remove(os.path.join('static', 'data', regster_code, filename))
                 except:

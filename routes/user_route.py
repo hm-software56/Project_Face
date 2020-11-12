@@ -27,3 +27,11 @@ def login():
                 session['login'] = {'id': login.id, 'username': login.username, 'type': login.type}
                 return redirect('/')
     return render_template('login.html', form=form)
+
+@user_route.route('/user', methods=['GET', 'POST'])
+def user():
+    a = encrypt_password('12345')
+    print(a)
+    # print(check_encrypted_password('Da123!@#qq', a))
+
+    return a

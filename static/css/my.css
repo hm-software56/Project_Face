@@ -164,11 +164,22 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 24px;
+
+}
+
+.text_t {
+    text-transform: uppercase;
+    background: linear-gradient(to right, red 0%, green 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .bg-info {
     background: #16a085 !important;
 }
+
 #loading {
-  background: transparent url('http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif') center no-repeat;
+    background: transparent url('http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif') center no-repeat;
 }
