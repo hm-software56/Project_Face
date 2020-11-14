@@ -11,6 +11,8 @@ from numpy import load
 import random
 # from flask_sqlalchemy import SQLAlchemy
 from models.register import Register
+import imutils
+
 # db = SQLAlchemy()
 root = os.path.dirname(os.path.abspath(__file__))
 
@@ -20,6 +22,7 @@ class CameraDetect(object):
         self.detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         self.labels = {}
         self.labels_name = {}
+        self.webcam_id = 0
         # addd new stylr
         self.face_locations = []
         self.face_encodings = []
@@ -41,18 +44,23 @@ class CameraDetect(object):
             frame = cv2.imread(path)
         else:
             success, frame = self.video.read()
-
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
         rgb_small_frame = small_frame[:, :, ::-1]
         face_names = []
         if self.process_this_frame:
             # Find all the faces and face encodings in the current frame of video
-            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=3,model='hog')
+            # for rotate_img in [0, 90, 180, 270]:
+            #    frame = imutils.rotate(frame, rotate_img)
+            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=3,
+                                                                  model='hog')
             self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations, num_jitters=1,
                                                                   model='small')
             found_face = {}
             count_face_found = len(self.face_encodings)
+            if count_face_found > 0:
+                self.process_this_frame = False
+
             for face_encoding in self.face_encodings:
                 count_face_found = count_face_found - 1
                 preson_name = 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'
@@ -98,44 +106,44 @@ class CameraDetect(object):
                 else:
                     found_face.update({random.randint(10, 100): 1000})  # set values to unkwon
                     face_names.append(preson_name)
-        # print(found_face)
+            # print(found_face)
+            # use for checking multiperson distances round and get minimum distance
+            i = -1
+            for value, id in found_face.items():
+                i = i + 1
+                if id != 1000:
+                    ss = []
+                    for v, ids in found_face.items():
+                        if ids != 1000 and id == ids:
+                            ss.append(v)
+                    for v, ids in found_face.items():
+                        if ids != 1000:
+                            if id == ids and value == min(ss):
+                                face_names[i] = self.labels_name.get(int(ids)) + " - " + str(
+                                    (float("{:.2f}".format(value))))
+                            elif id == ids and value != min(ss):
+                                face_names[i] = 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'
+            # end checking
+            for (top, right, bottom, left), name in zip(self.face_locations, face_names):
+                # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+                top *= 4
+                right *= 4
+                bottom *= 4
+                left *= 4
 
-        # use for checking multiperson distances round and get minimum distance
-        i = -1
-        for value, id in found_face.items():
-            i = i + 1
-            if id != 1000:
-                ss = []
-                for v, ids in found_face.items():
-                    if ids != 1000 and id == ids:
-                        ss.append(v)
-                for v, ids in found_face.items():
-                    if ids != 1000:
-                        if id == ids and value == min(ss):
-                            face_names[i] = self.labels_name.get(int(ids))
-                        elif id == ids and value != min(ss):
-                            face_names[i] = 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'
-        # end checking
-        for (top, right, bottom, left), name in zip(self.face_locations, face_names):
-            # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-            top *= 4
-            right *= 4
-            bottom *= 4
-            left *= 4
+                # Draw a box around the face
+                if name != 'ບໍ່ຮູ້ຈັກຄົນນີ້.!':
+                    cv2.rectangle(frame, (left, top), (right, bottom), (3, 128, 37), 2)
+                    cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (3, 128, 37), cv2.FILLED)
+                else:
+                    cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                    cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
 
-            # Draw a box around the face
-            if name != 'ບໍ່ຮູ້ຈັກຄົນນີ້.!':
-                cv2.rectangle(frame, (left, top), (right, bottom), (3, 128, 37), 2)
-                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (3, 128, 37), cv2.FILLED)
-            else:
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-
-            label = name
-            tex_color = '#FFFFFF'
-            font_size = 20
-            img = self.addlaotext(frame, left + 6, bottom - 30, label, tex_color, font_size)
-            frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+                label = name
+                tex_color = '#FFFFFF'
+                font_size = 20
+                img = self.addlaotext(frame, left + 6, bottom - 30, label, tex_color, font_size)
+                frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
         ret, jpeg = cv2.imencode('.jpg', frame)
         return jpeg.tobytes()
 

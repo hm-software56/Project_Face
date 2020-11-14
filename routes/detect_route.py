@@ -1,3 +1,5 @@
+from urllib import request
+
 from flask import Flask, render_template, Response, redirect, url_for, request, jsonify, session, Blueprint, send_file
 from cameradetect import CameraDetect
 from models.train import Traindata
@@ -11,6 +13,7 @@ from random import choice
 import time
 from flask_bootstrap import Bootstrap
 import os
+import math
 import shutil
 from PIL import Image
 from autocrop import Cropper
@@ -21,7 +24,6 @@ from werkzeug.utils import secure_filename
 detect_route = Blueprint('detect_route', __name__)
 pridectcamera = CameraDetect()
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-webcam_id = 0
 root = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -39,31 +41,48 @@ def captureupload():
             os.makedirs(path)
         file.save(os.path.join(path, filename))
         pridectcamera.img_detect = filename
+        # file_stats = os.stat(os.path.join(path, filename))
+        # print(file_stats.st_size)
         return True
     else:
         return jsonify(result=render_template('predict.html', time=time.time()))
 
 
-@detect_route.route('/predict')
+@detect_route.route('/predict', methods=['GET', 'POST'])
 def predict():
     pridectcamera.loadLabelName()
+    pridectcamera.__del__()
+    pridectcamera.process_this_frame = True
     if request.args.get('type') == 'img':
         return jsonify(result=render_template('modal_upload_detect.html'))
     elif request.args.get('type') == 'capture':
         return jsonify(result=render_template('modal_capture_detect.html'))
     else:
+        if request.form.get('webcam_ip'):
+            pridectcamera.__del__()
+            if len(request.form.get('webcam_ip')) > 2:
+                pridectcamera.webcam_id = request.form.get('webcam_ip')
+            else:
+                pridectcamera.webcam_id = int(request.form.get('webcam_ip'))
         pridectcamera.img_detect = ''
         return jsonify(result=render_template('predict.html', time=time.time()))
 
 
 def genDetect(camera):
-    camera.video = cv2.VideoCapture(webcam_id)
+    print(camera.webcam_id)
+    camera.video = cv2.VideoCapture(camera.webcam_id)
+    s = 0
     while True:
+        s = s + 1
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
         if camera.img_detect:
             break
+
+        if s %2 == 0:  # use cross one step fast then detect all
+            camera.process_this_frame = True
+            #print('xxxxxxxxxxxxxxxxxxxxx')
 
 
 @detect_route.route('/video_detect', methods=['GET', 'POST'])
@@ -91,7 +110,12 @@ def uploadfiledetect():
         img = os.path.join('static', 'photos', 'detect', filename)
         # setdatacamera.drop(path, filename)
         try:
-            # pridectcamera.dropface(img)
+            frame = cv2.imread(img)
+            height, width = frame.shape[:2]
+            if height > 3500 or width > 3500:  # Big image must resizse
+                frame = cv2.resize(frame, None, fx=0.1, fy=0.1, interpolation=cv2.INTER_AREA)
+                cv2.imwrite(img, frame)
+
             print('No drop face use Oraginal')
         except:
             print('Errors No face drop')
@@ -110,6 +134,8 @@ def getdata():
         for person_id in pridectcamera.list_name_show:
             SaveFound(person_id, session['generate_camera_id'])
         pridectcamera.list_name_show.clear()
+        if pridectcamera.img_detect:
+            os.remove(os.path.join('static', 'photos', 'detect', pridectcamera.img_detect))
 
         model = Register.query \
             .join(Provinces, Provinces.id == Register.province_id) \
@@ -122,6 +148,7 @@ def getdata():
         return jsonify(result=render_template('persion_detail.html', model=model))
     else:
         return 'No new Detetd new person'
+
 
 @detect_route.route('/aa', methods=['GET'])
 def aa():

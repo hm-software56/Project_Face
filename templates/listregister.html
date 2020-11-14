@@ -23,7 +23,7 @@
                                     <table class="table table-hover mb-0 " id="w_tb">
                                         <tr>
                                             <td id="w_td" class="text-right">ຊື່:</td>
-                                            <td  id="w_td1">{{ data.first_name }} {{ data.last_name }}</td>
+                                            <td id="w_td1">{{ data.first_name }} {{ data.last_name }}</td>
                                             {% if session['login'] and session['login']['type']=="Admin" %}
                                                 <td rowspan="4" class="text-center" width="100">
                                                     <a class="btn btn-outline-success"
@@ -31,13 +31,20 @@
                                                             class="fa fa-edit"></span></a>
                                                     <div class="pt-2"></div>
                                                     <a class="btn btn-outline-primary"
-                                                       href="{{ url_for('register_route.register',id=data.id) }}"><span
+                                                       href="{{ url_for('register_route.rview',id=data.id) }}"><span
                                                             class="fa fa-eye"></span></a>
                                                     <div class="pt-2"></div>
                                                     <a class="btn btn-outline-danger"
                                                        href="{{ url_for('register_route.rdel',id=data.id) }}"
                                                        onclick="return confirm('ທ່ານຕ້ອງການລຶບຂໍ້ມູນທ່ານນີ້ອອກແມ່ນບໍ່.?')"><span
                                                             class="fa fa-trash"></span></a>
+                                                </td>
+                                            {% else %}
+                                                <td rowspan="4" class="text-center pt-5" width="100">
+
+                                                    <a class="btn btn-outline-primary"
+                                                       href="{{ url_for('register_route.rview',id=data.id) }}"><span
+                                                            class="fa fa-eye"></span></a>
                                                 </td>
                                             {% endif %}
                                         </tr>

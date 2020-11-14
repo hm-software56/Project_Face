@@ -19,6 +19,7 @@ $(function () {
         $.ajax({
             url: '/predict?type=webcam',
             //url: '/predict?type=webcam',
+            data: $('#form').serialize(),
             dataType: "json",
             beforeSend: function () {
                 $("#result").html('<img src="static/default/loading.gif" class="rounded mx-auto d-block img-thumbnail img-fluid">')
@@ -41,20 +42,6 @@ $(function () {
             success: function (data) {
                 $("#result").html(data.result)
                 document.getElementById('name').value = '';
-            },
-        });
-        return false;
-    });
-
-    $('#index_full').bind('click', function () {
-        $.ajax({
-            url: '/indexfull',
-            dataType: "json",
-            beforeSend: function () {
-                $("#result").html('<img src="static/default/loading.gif" class="rounded mx-auto d-block img-thumbnail img-fluid">');
-            },
-            success: function (data) {
-                $("#result").html('ssssssssssssss');
             },
         });
         return false;

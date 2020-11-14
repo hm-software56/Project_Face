@@ -46,7 +46,7 @@ class Traindata(object):
                     for image in path:
                         try:
                             image_load = face_recognition.load_image_file(image)
-                            image_encoding = face_recognition.face_encodings(image_load, num_jitters=1, model='large')[
+                            image_encoding = face_recognition.face_encodings(image_load, num_jitters=4, model='large')[
                                 0]
                             known_face_encodings.append(image_encoding)
                             known_face_ids.append(face_code)

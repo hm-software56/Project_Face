@@ -6,7 +6,7 @@
         <div id="intro" class="h-100">
             <div class="container-fluid pl-0 pr-0 ">
                 {% include 'navbar.html' %}
-                {% include 'index_full.html' %}
+                {% include 'modal_camera_ip.html' %}
                 <div class="col-12 border" id="bg">
                     <div class="row">
                         <div class="col-md-6 pt-2">
@@ -61,7 +61,8 @@
                                                                 <button type="button"
                                                                         class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
                                                                         id="predict_webcame">
-                                                                    <i class="fa fa-video"></i> ກວດສອບຮັບຮູ້ດ້ວຍ Real-time
+                                                                    <i class="fa fa-video"></i> ກວດສອບຮັບຮູ້ດ້ວຍ
+                                                                    Real-time
                                                                 </button>
 
                                                                 <div class="dropdown-divider"></div>
@@ -94,11 +95,14 @@
                                                                     <i class="fa fa-camera"></i> ກວດສອບຮັບຮູ້ດ້ວຍ Camera
                                                                 </button>
                                                                 <div class="dropdown-divider"></div>
-                                                                <button type="button" disabled
+                                                                <button type="button"
                                                                         class=" btn-block bg-white text-success btn-outline-success btn  dropdown-item"
-                                                                        id="predict_webcame">
-                                                                    <i class="fa fa-video"></i> ກວດສອບຮັບຮູ້ດ້ວຍ Real-time
+                                                                        id="predict_webcame11" data-toggle="modal"
+                                                                        data-target="#camera_ip">
+                                                                    <i class="fa fa-video"></i> ກວດສອບຮັບຮູ້ດ້ວຍ
+                                                                    Real-time
                                                                 </button>
+
 
                                                                 <div class="dropdown-divider"></div>
                                                                 <button type="button"

@@ -38,9 +38,24 @@ def listregister():
     return render_template('listregister.html', models=models)
 
 
+@register_route.route('/rview/', methods=['GET', 'POST'])
+def rview():
+    CameraDetect().__del__()  # Close camera background
+    if request.args.get('id'):
+        id = int(request.args.get('id'))
+        entry = Register.query.get(id)
+        form = RegisterForm(obj=entry)
+        form.province_id.choices = ListProvince()
+        form.district_id.choices = ListDistrictBy(entry.province_id)
+        form.village_id.choices = ListVillageBy(entry.district_id)
+        all_image = [(str(entry.code), f) for f in
+                     os.listdir(os.path.join('static', 'data', str(entry.code)))]
+    return render_template('register_view.html', form=form, all_image=all_image)
+
+
 @register_route.route('/register/', methods=['GET', 'POST'])
 def register():
-    CameraDetect().__del__() # Close camera background
+    CameraDetect().__del__()  # Close camera background
     if request.args.get('id'):
         id = int(request.args.get('id'))
         entry = Register.query.get(id)

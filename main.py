@@ -87,5 +87,5 @@ def jswebcam():
 
 
 if __name__ == '__main__':
-    #app.run(debug=True)
-    app.run(debug=False, ssl_context='adhoc', host='192.168.100.247',port='2020')
+    app.run(debug=True)
+    #app.run(debug=False, ssl_context=('cert.pem', 'key.pem'), host='192.168.43.114',port='5000')
