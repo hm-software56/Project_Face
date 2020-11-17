@@ -44,7 +44,13 @@ class CameraDetect(object):
             frame = cv2.imread(path)
         else:
             success, frame = self.video.read()
-        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+        try:
+            small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+        except: # check camera if done have don't have return not found
+            path = os.path.join(root, 'static', 'default', 'notfound_camera.png')
+            frame = cv2.imread(path)
+            ret, jpeg = cv2.imencode('.jpg', frame)
+            return jpeg.tobytes()
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
         rgb_small_frame = small_frame[:, :, ::-1]
         face_names = []

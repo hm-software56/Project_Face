@@ -1,0 +1,1 @@
+gunicorn --certfile=cert.pem --keyfile=key.pem --bind 192.168.100.247:2020 main:app
