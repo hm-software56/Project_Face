@@ -11,6 +11,7 @@ import glob
 from models.register import Register
 from models.user import checkLogin
 import random
+
 app = Flask(__name__)
 app.secret_key = "daxiong123zzzzzz"
 Bootstrap(app)
@@ -29,13 +30,20 @@ with app.app_context():
 
 @app.before_request
 def before_request_func():
+    if str(request.url_rule) == '/domain':
+        print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+        return render_template('domain.html')
     if checkLogin() == False:
         url = str(request.url_rule)
         if not url in '/login' and '/static/' not in request.path:
             return redirect(url_for('user_route.login'))
-
         # if request.script_root != "/static":
         #    print(request.script_root)
+
+
+@app.route('/domain', methods=['POST', 'GET'])
+def domain():
+    return redirect('index')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -47,10 +55,10 @@ def home():
 def index():
     # use for checking when deteted get data to display
     try:
-        #session['generate_camera_id']
+        # session['generate_camera_id']
         session['generate_camera_id'] = random.randint(000000, 999999)
     except:
-        session['generate_camera_id']=random.randint(000000,999999)
+        session['generate_camera_id'] = random.randint(000000, 999999)
     return render_template('index.html', camera='Camera', list_name='')
 
 
@@ -88,4 +96,4 @@ def jswebcam():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    #app.run(debug=False, ssl_context=('cert.pem', 'key.pem'), host='192.168.43.114',port='5000')
+    #app.run(debug=False, ssl_context=('cert.pem', 'key.pem'), host='192.168.100.247',port='2020')

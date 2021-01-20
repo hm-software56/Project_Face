@@ -46,7 +46,6 @@ $(function () {
         });
         return false;
     });
-
     $('#trainer').bind('click', function () {
         $.ajax({
             url: '/trainer',
@@ -113,3 +112,4 @@ function uploaimg(theForm) {
         }
     });
 }
+

@@ -28,6 +28,7 @@ def login():
                 return redirect('/')
     return render_template('login.html', form=form)
 
+
 @user_route.route('/user', methods=['GET', 'POST'])
 def user():
     a = encrypt_password('12345')

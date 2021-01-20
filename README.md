@@ -3,5 +3,3 @@
 ============================
 <img src="https://github.com/ntajxyooj/Project_Face/blob/JS/static/git/1.png" width="100%"> 
 <img src="https://github.com/ntajxyooj/Project_Face/blob/JS/static/git/2.png" width="100%"> 
-
-

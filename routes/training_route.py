@@ -2,7 +2,6 @@ from flask import Flask, render_template, Response, redirect, url_for, request, 
 from camera import VideoCamera
 from cameradetect import CameraDetect
 from models.train import Traindata
-
 training_route = Blueprint('training_route', __name__)
 
 @training_route.route('/trainer')

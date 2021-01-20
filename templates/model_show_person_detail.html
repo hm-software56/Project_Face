@@ -1,0 +1,84 @@
+{% import "bootstrap/wtf.html" as wtf %}
+<script>
+    $('#modal_show_persondetail').modal('show');
+</script>
+<div class="modal fade" id="modal_show_persondetail" tabindex="-1" role="dialog"
+     aria-labelledby="modal_show_persondetail"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-full-width" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLabel"> ລາຍລະອຽດຂໍ້ມູນບັດປະຈໍາຕົວ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <fieldset class="scheduler-border">
+                            <legend class="scheduler-border">ຂໍ້ມູນສ່ວນຕົວ</legend>
+                            <div class="control-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.first_name, class='form-control', placeholder='ຊື່',disabled=True) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.last_name, class='form-control', placeholder='ນາມສະກຸນ',disabled=True) }}
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.province_id, class='form-control', placeholder='ແຂວງ',disabled=True) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.district_id, class='form-control', placeholder='ເມືອງ',disabled=True) }}
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.village_id, class='form-control', placeholder='ບ້ານ',disabled=True) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.date_birth, type='date',class='form-control', placeholder='ວັນເດຶອນປີເກິດ',disabled=True) }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ wtf.form_field(form.card_id, class='form-control', placeholder='ເລກບັດປະຈໍາຕົວ/ສໍາມະໂນຄົວ',disabled=True) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="scheduler-border">
+                            <legend class="scheduler-border">ຂໍ້ມູນສະຖານທິ່ເຮັດວຽກ/ສືກສາ</legend>
+                            <div class="control-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.location_name, class='form-control', placeholder='ສະຖານທີ່',disabled=True) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.section_name, class='form-control', placeholder='ພາກສ່ວນ',disabled=True) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.position, class='form-control', placeholder='ຕໍາແໜ່ງ',disabled=True) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.eduction, class='form-control', placeholder='ລະດັບການສຶກສາ',disabled=True) }}
+                                    </div>
+                                    <div class="col-md-12">{{ wtf.form_field(form.other, class='form-control', placeholder='ລາຍລະອຽດອຶ່ນໆ',disabled=True) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="scheduler-border">
+                            <legend class="scheduler-border">ຊຸດຂໍ້ມູນຮູບພາບ</legend>
+                            <div class="scrollimg">
+                                {% for index,name in all_image %}
+                                    <img src="\static\imgdataset\{{ index }}\{{ name }}" width="30" class="pb-1">
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

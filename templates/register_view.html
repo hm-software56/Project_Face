@@ -3,6 +3,7 @@
 {% block content %}
     <div class="container-fluid ">
         {% include 'navbar.html' %}
+
         <div class="col-12 border" id="bg">
             <div class="row">
 
@@ -38,7 +39,7 @@
                         <legend class="scheduler-border">ຊຸດຂໍ້ມູນຮູບພາບ</legend>
                         <div class="scrollimg">
                             {% for index,name in all_image %}
-                                <img src="\static\data\{{ index }}\{{ name }}" width="30" class="pb-1">
+                                <img src="\static\imgdataset\{{ index }}\{{ name }}" width="30" class="pb-1">
                             {% endfor %}
                         </div>
                     </fieldset>

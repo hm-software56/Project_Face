@@ -73,7 +73,7 @@ class CameraDetect(object):
                 # distance_same_face = False
                 # See if the face is a match for the known face(s)
                 # tolerance=0.4 is distance_same_face
-                distans = [0.3, 0.4, 0.5]
+                distans = [0.3, 0.4]
                 for dst in distans:
                     matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=dst)
                     if True in matches:

@@ -48,9 +48,26 @@ def rview():
         form.province_id.choices = ListProvince()
         form.district_id.choices = ListDistrictBy(entry.province_id)
         form.village_id.choices = ListVillageBy(entry.district_id)
-        all_image = [(str(entry.code), f) for f in
-                     os.listdir(os.path.join('static', 'data', str(entry.code)))]
+        all_image = [(str(entry.code), f) for _, f in zip(range(100),
+                                                          os.listdir(
+                                                              os.path.join('static', 'imgdataset', str(entry.code))))]
     return render_template('register_view.html', form=form, all_image=all_image)
+
+
+@register_route.route('/showdetailperson', methods=['GET'])
+def showdetailperson():
+    if request.args.get('id'):
+        id = int(request.args.get('id'))
+        entry = Register.query.get(id)
+        form = RegisterForm(obj=entry)
+        form.province_id.choices = ListProvince()
+        form.district_id.choices = ListDistrictBy(entry.province_id)
+        form.village_id.choices = ListVillageBy(entry.district_id)
+        all_image = [(str(entry.code), f) for _, f in zip(range(100),
+                                                          os.listdir(
+                                                              os.path.join('static', 'imgdataset', str(entry.code))))]
+
+    return jsonify(result=render_template('model_show_person_detail.html', form=form, all_image=all_image))
 
 
 @register_route.route('/register/', methods=['GET', 'POST'])

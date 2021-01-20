@@ -37,8 +37,8 @@ def check_encrypted_password(password, hashed):
 
 def checkLogin():
     if not session.get("login") is None:
+        print('Yes session login')
         return True
-        print('dddddddddddd')
     else:
-        print('ssssssss')
+        print('No session login')
         return False
