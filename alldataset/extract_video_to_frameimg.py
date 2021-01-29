@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 # set video file path of input video with name and extension
-vid = cv2.VideoCapture('C:/Users/user/Desktop/img/1.mp4')
+vid = cv2.VideoCapture('D:/Python/Project_Face/alldataset/43.mp4')
 
 
 if not os.path.exists('images'):

@@ -33,7 +33,7 @@ def listregister():
         .join(Villages, Villages.id == Register.village_id) \
         .add_columns(Register.id, Register.code, Register.first_name, Register.last_name, Provinces.pro_name_la,
                      Districts.dis_name_la, Villages.vill_name_la, Register.card_id, Register.location_name,
-                     Register.section_name) \
+                     Register.section_name, Register.start_date, Register.expire_date) \
         .all()
     return render_template('listregister.html', models=models)
 
@@ -90,31 +90,18 @@ def register():
             code = 1
         form.province_id.choices = ListProvince()
     if request.form:
-        model_register = Register.query.filter_by(
+        """model_register = Register.query.filter_by(
             first_name=request.form.get('first_name'),
             last_name=request.form.get('last_name'),
             date_birth=request.form.get('date_birth')
-        ).first()
+        ).first()"""
+        id = int(request.form.get('id'))
+        model_register = Register.query.get(id)
         if model_register:
             code = model_register.code
         else:
             model_register = Register()
             code = code
-            """insert = Register(
-                first_name=request.form.get('first_name'),
-                last_name=request.form.get('last_name'),
-                code=code,
-                province_id=request.form.get('province_id'),
-                district_id=request.form.get('district_id'),
-                village_id=request.form.get('village_id'),
-                date_birth=request.form.get('date_birth'),
-                card_id=request.form.get('card_id'),
-                location_name=request.form.get('location_name'),
-                section_name=request.form.get('section_name'),
-                position=request.form.get('position'),
-                eduction=request.form.get('eduction'),
-                other=request.form.get('other'),
-            )"""
         model_register.first_name = request.form.get('first_name'),
         model_register.last_name = request.form.get('last_name'),
         model_register.code = code,
@@ -123,6 +110,8 @@ def register():
         model_register.village_id = request.form.get('village_id'),
         model_register.date_birth = request.form.get('date_birth'),
         model_register.card_id = request.form.get('card_id'),
+        model_register.start_date = request.form.get('start_date'),
+        model_register.expire_date = request.form.get('expire_date'),
         model_register.location_name = request.form.get('location_name'),
         model_register.section_name = request.form.get('section_name'),
         model_register.position = request.form.get('position'),
@@ -228,3 +217,18 @@ def rdel():
             except:
                 os.remove(path)
     return redirect('listregister')
+
+
+@register_route.route('/generatcode', methods=['GET', 'POST'])
+def generatcode():
+    face_code = [];
+    for i in range(1, 44):
+        face_code.append(i)
+        print(i);
+    try:
+        face_codes = load(os.path.join('static', 'dataset_model', 'new_face_ids.npy')).tolist()
+        face_codes = face_codes + face_code
+        save(os.path.join('static', 'dataset_model', 'new_face_ids.npy'), face_codes)
+    except:
+        save(os.path.join('static', 'dataset_model', 'new_face_ids.npy'), face_code)
+    return 'Done'

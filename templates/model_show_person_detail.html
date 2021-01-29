@@ -43,10 +43,16 @@
                                     <div class="col-md-12">
                                         {{ wtf.form_field(form.card_id, class='form-control', placeholder='ເລກບັດປະຈໍາຕົວ/ສໍາມະໂນຄົວ',disabled=True) }}
                                     </div>
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.start_date, class='form-control', placeholder='ອອກໃຫ້ວັນທີ່',disabled=True) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.expire_date, class='form-control', placeholder='ໝົດກໍານົດວັນທີ',disabled=True) }}
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
-                        <fieldset class="scheduler-border">
+                        <!--<fieldset class="scheduler-border">
                             <legend class="scheduler-border">ຂໍ້ມູນສະຖານທິ່ເຮັດວຽກ/ສືກສາ</legend>
                             <div class="control-group">
                                 <div class="row">
@@ -66,7 +72,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
+                        </fieldset>-->
                         <fieldset class="scheduler-border">
                             <legend class="scheduler-border">ຊຸດຂໍ້ມູນຮູບພາບ</legend>
                             <div class="scrollimg">

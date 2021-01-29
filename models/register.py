@@ -19,6 +19,8 @@ class Register(db.Model):
     village_id = db.Column(db.Integer)
     date_birth = db.Column(db.Date)
     card_id = db.Column(db.String(255))
+    start_date = db.Column(db.Date)
+    expire_date = db.Column(db.Date)
     location_name = db.Column(db.String(255))
     section_name = db.Column(db.String(255))
     position = db.Column(db.String(255))
@@ -27,6 +29,7 @@ class Register(db.Model):
 
 
 class RegisterForm(FlaskForm):
+    id = IntegerField('id')
     first_name = StringField('ຊື່', [validators.DataRequired()])
     last_name = StringField('ນາມສະກຸນ', [validators.DataRequired()])
     province_id = SelectField('ແຂວງ', choices=[], validators=[validators.DataRequired()])
@@ -34,10 +37,12 @@ class RegisterForm(FlaskForm):
     village_id = SelectField('ບ້ານ', choices=[], validators=[validators.DataRequired()])
     date_birth = DateField('ວັນເດືອນປິເກິດ', [validators.DataRequired()])
     card_id = StringField('ເລກບັດປະຈໍາຕົວ/ສໍາມະໂນຄົວ', [validators.DataRequired()])
-    location_name = StringField('ສະຖານທີ່', [validators.DataRequired()])
-    section_name = StringField('ພາກສ່ວນ', [validators.DataRequired()])
-    position = StringField('ຕໍາແໜ່ງ', [validators.DataRequired()])
-    eduction = StringField('ລະດັບການສຶກສາ', [validators.DataRequired()])
+    start_date = DateField('ອອກໃຫ້ວັນທີ່', [validators.DataRequired()])
+    expire_date = DateField('ໝົດກໍານົດວັນທີ', [validators.DataRequired()])
+    location_name = StringField('ສະຖານທີ່')
+    section_name = StringField('ພາກສ່ວນ')
+    position = StringField('ຕໍາແໜ່ງ')
+    eduction = StringField('ລະດັບການສຶກສາ')
     other = TextAreaField('ລາຍລະອຽດອຶ່ນໆ')
 
     def dropface(self, filename):

@@ -75,6 +75,9 @@
                         <fieldset class="scheduler-border">
                             <legend class="scheduler-border">ຂໍ້ມູນສ່ວນຕົວ</legend>
                             <div class="control-group">
+                                <span style='display: none'>
+                                {{ wtf.form_field(form.id, class='form-control') }}
+                                </span>
                                 {{ wtf.form_field(form.first_name, class='form-control', placeholder='ຊື່') }}
                                 {{ wtf.form_field(form.last_name, class='form-control', placeholder='ນາມສະກຸນ') }}
                                 {{ wtf.form_field(form.province_id, class='form-control', placeholder='ແຂວງ') }}
@@ -82,9 +85,11 @@
                                 {{ wtf.form_field(form.village_id, class='form-control', placeholder='ບ້ານ') }}
                                 {{ wtf.form_field(form.date_birth, type='date',class='form-control', placeholder='ວັນເດຶອນປີເກິດ') }}
                                 {{ wtf.form_field(form.card_id, class='form-control', placeholder='ເລກບັດປະຈໍາຕົວ/ສໍາມະໂນຄົວ') }}
+                                {{ wtf.form_field(form.start_date, type='date',class='form-control', placeholder='ອອກໃຫ້ວັນທີ່') }}
+                                {{ wtf.form_field(form.expire_date, type='date',class='form-control', placeholder='ໝົດກໍານົດວັນທີ') }}
                             </div>
                         </fieldset>
-                        <fieldset class="scheduler-border">
+                        <!--<fieldset class="scheduler-border">
                             <legend class="scheduler-border">ຂໍ້ມູນສະຖານທິ່ເຮັດວຽກ/ສືກສາ</legend>
                             <div class="control-group">
                                 {{ wtf.form_field(form.location_name, class='form-control', placeholder='ສະຖານທີ່') }}
@@ -93,7 +98,7 @@
                                 {{ wtf.form_field(form.eduction, class='form-control', placeholder='ລະດັບການສຶກສາ') }}
                                 {{ wtf.form_field(form.other, class='form-control', placeholder='ລາຍລະອຽດອຶ່ນໆ') }}
                             </div>
-                        </fieldset>
+                        </fieldset>-->
                         <input id="action" type="hidden" required>
                         <div class="btn-group col-sm-12 p-0 " role="group"
                              aria-label="Button group with nested dropdown">

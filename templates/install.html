@@ -70,8 +70,16 @@
                             <fieldset class="scheduler-border">
                                 <legend class="scheduler-border">Clean ຂໍ້ມູນ ແລະ Reset ຂໍ້ມູນໃໝ່</legend>
                                 <ul>
+                                    <li class="mb-2">
+                                        <a href="{{ url_for('cleanolddata',id=1) }}"
+                                           onclick="confirm('ທ່ານຕ້ອງການລຶບຂໍ້ມູນແມ່ແບບອອກແມ່ນບໍ.?')">ກົດ Clean
+                                            ຂໍ້ມູນແມ່ແບບ (model)</a>
+                                    </li>
+
                                     <li>
-                                        <a href="{{ url_for('cleanolddata') }}">ກົດ Clean ຂໍ້ມູນ ແລະ Reset ຂໍ້ມູນໃໝ່</a>
+                                        <a href="{{ url_for('cleanolddata',id=0) }}"
+                                           onclick="confirm('ທ່ານຕ້ອງການລຶບຂໍ້ມູນແມ່ແບບ ແລະ ຖານຂໍ້ມູນອອກແມ່ນບໍ.?')">ກົດ
+                                            Clean ຂໍ້ມູນ ແລະ Reset ຂໍ້ມູນໃໝ່</a>
                                     </li>
                                 </ul>
                             </fieldset>

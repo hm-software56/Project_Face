@@ -4,6 +4,23 @@
 
     <div class="container-fluid ">
         {% include 'navbar.html' %}
+        <script>
+            $(document).ready(function () {
+                $("#myInput").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#myTable div").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        console.log(value)
+                        if (value == '') {
+                            $(".table-responsive").addClass("col-8 col-md-10");
+                        } else {
+                            $("div").removeClass("col-8 col-md-10");
+                        }
+
+                    });
+                });
+            });
+        </script>
         <div class="col-12 border" id="bg">
             <div class="row">
 
@@ -12,20 +29,28 @@
                         ລາຍຊື່ຂໍ້ມູນບັດປະຈໍາຕົວ
                     </div>
                 </div>
-                <div class="col-md-12  ">
+                <div class="col-md-12">
+                    <div class="form-group has-search">
+                        <span class="fa fa-search form-control-feedback"></span>
+                        <input type="text" id="myInput" class="form-control" placeholder="ຄົ້ນຫາ">
+                    </div>
+                </div>
+                <div class="col-md-12  " id="myTable">
                     {% if models %}
                         {% for data in models %}
-                            <div class="row">
-                                <div class="col-4 col-md-1">
-                                    <img src="static\data_person\{{ data.code }}\1.jpg" class="rounded img-fluid small">
+                            <div class="row" id="a">
+                                <div class="col-4 col-md-2">
+                                    <img src="static\data_person\{{ data.code }}\1.jpg"
+                                         class="rounded img-fluid small" title="">
                                 </div>
-                                <div class="col-8 col-md-11 table-responsive">
+                                <div class="col-8 col-md-10 table-responsive">
                                     <table class="table table-hover mb-0 " id="w_tb">
+                                        <tbody>
                                         <tr>
-                                            <td id="w_td" class="text-right">ຊື່:</td>
-                                            <td id="w_td1">{{ data.first_name }} {{ data.last_name }}</td>
+                                            <td id="w_td" class="text-right">ລະຫັດ:</td>
+                                            <td id="w_td1">{{ data.code }}</td>
                                             {% if session['login'] and session['login']['type']=="Admin" %}
-                                                <td rowspan="4" class="text-center" width="100">
+                                                <td rowspan="6" class="text-center" width="100">
                                                     <a class="btn btn-outline-success"
                                                        href="{{ url_for('register_route.register',id=data.id) }}"><span
                                                             class="fa fa-edit"></span></a>
@@ -40,13 +65,18 @@
                                                             class="fa fa-trash"></span></a>
                                                 </td>
                                             {% else %}
-                                                <td rowspan="4" class="text-center pt-5" width="100">
+                                                <td rowspan="6" class="text-center pt-5" width="100">
 
                                                     <a class="btn btn-outline-primary"
                                                        href="{{ url_for('register_route.rview',id=data.id) }}"><span
                                                             class="fa fa-eye"></span></a>
                                                 </td>
                                             {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td id="w_td" class="text-right">ຊື່:</td>
+                                            <td id="w_td1">{{ data.first_name }} {{ data.last_name }}</td>
+
                                         </tr>
                                         <tr>
                                             <td class="text-right">ແຂວງ/ເມືອງ/ບ້ານ:</td>
@@ -57,13 +87,17 @@
                                             <td>{{ data.card_id }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right">ສະຖານທິ່ເຮັດວຽກ/ສືກສາ:</td>
-                                            <td>{{ data.location_name }}, {{ data.section_name }}</td>
+                                            <td class="text-right">ອອກໃຫ້ວັນທີ່:</td>
+                                            <td>{{ data.start_date }}</td>
                                         </tr>
+                                        <tr>
+                                            <td class="text-right">ໝົດກໍານົດວັນທີ:</td>
+                                            <td>{{ data.expire_date }}</td>
+                                        </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <hr/>
                         {% endfor %}
 
                     {% endif %}

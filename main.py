@@ -75,7 +75,7 @@ def install():
 @app.route('/cleanolddata', methods=['POST', 'GET'])
 def cleanolddata():
     root = os.path.dirname(os.path.abspath(__file__))
-    d = ['data', 'data_person', 'dataset_model']
+    d = ['data', 'data_person', 'dataset_model', 'imgdataset']
     for dc in d:
         path = os.path.join(root, 'static', dc, '*')
         files = glob.glob(path)
@@ -84,8 +84,9 @@ def cleanolddata():
                 shutil.rmtree(f)
             except:
                 os.remove(f)
-    db.session.query(Register).delete()
-    db.session.commit()
+    if (request.args.get('id') == '0'):
+        db.session.query(Register).delete()
+        db.session.commit()
     return redirect('install')
 
 
@@ -96,4 +97,4 @@ def jswebcam():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    #app.run(debug=False, ssl_context=('cert.pem', 'key.pem'), host='192.168.100.247',port='2020')
+    # app.run(debug=False, ssl_context=('cert.pem', 'key.pem'), host='192.168.100.247',port='2020')
