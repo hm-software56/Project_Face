@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+    <div class="container-fluid ">
+        {% include 'navbar.html' %}
+        <div class="col-12 border" id="bg">
+            <div class="row">
+
+                <div class="col-md-12 p-2">
+                    <div class="bg-info text-white text-center rounded-top pt-2 pb-2">
+                        ລົງທະບຽນຂໍ້ມູນບັດປະຈໍາຕົວ
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <form method=post>
+                        {{ form.hidden_tag() }}
+                        <fieldset class="scheduler-border">
+                            <legend class="scheduler-border">ຕົວກໍານົດຄ່າ (Parameters)</legend>
+                            <div class="control-group">
+                                <span style='display: none'>
+                                {{ wtf.form_field(form.id, class='form-control') }}
+                                </span>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.camera_id, class='form-control', placeholder='ລະຫັດ/IP ກ້ອງ') }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.model_name, class='form-control', placeholder='ວິທິການ model') }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.number_of_times, class='form-control', placeholder='ຈໍານວນຄັ້ງຊອກໃບໜ້າ') }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ wtf.form_field(form.number_jitters, class='form-control', placeholder='ຈໍານວນຄັ້ງວິເຄາະໃບໜ້າ') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit"
+                                    class="bg-white text-danger btn-outline-danger btn ">
+                                <i class="fa fa-save"></i> ບັນທືກ
+                            </button>
+                        </fieldset>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -10,6 +10,7 @@ from models.register import Register
 from shutil import copyfile
 import shutil
 from flask_sqlalchemy import SQLAlchemy
+from flask import session
 
 db = SQLAlchemy()
 import cameradetect
@@ -21,6 +22,10 @@ import re
 
 
 class Traindata(object):
+    def __init__(self):
+        self.number_of_times = 1
+        self.number_jitters = 1
+        self.model_name = 'hog'
 
     def train(self):
         # data_trainer_faces = load('data_trained/data_trainer_faces.npy').tolist()
@@ -47,8 +52,12 @@ class Traindata(object):
                     for image in path:
                         try:
                             image_load = face_recognition.load_image_file(image)
-                            image_encoding = face_recognition.face_encodings(image_load, num_jitters=1, model='small')[
-                                0]
+                            face_locations = face_recognition.face_locations(image_load,
+                                                                             number_of_times_to_upsample=self.number_of_times,
+                                                                             model=self.model_name)
+                            image_encoding = face_recognition.face_encodings(image_load, face_locations,
+                                                                             num_jitters=self.number_jitters,
+                                                                             model='large')[0]
                             known_face_encodings.append(image_encoding)
                             known_face_ids.append(face_code)
                         except:

@@ -1,3 +1,4 @@
+from flask import session
 import cv2
 from PIL import ImageFont, ImageDraw, Image
 import os
@@ -32,6 +33,11 @@ class CameraDetect(object):
         self.list_name_show = {}
         self.img_detect = ''
 
+        self.generate_camera_id = 0
+        self.number_of_times = 1
+        self.number_jitters = 1
+        self.model_name = 'hog'
+
     def __del__(self):
         try:
             self.video.release()
@@ -46,7 +52,7 @@ class CameraDetect(object):
             success, frame = self.video.read()
         try:
             small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-        except: # check camera if done have don't have return not found
+        except:  # check camera if done have don't have return not found
             path = os.path.join(root, 'static', 'default', 'notfound_camera.png')
             frame = cv2.imread(path)
             ret, jpeg = cv2.imencode('.jpg', frame)
@@ -58,10 +64,12 @@ class CameraDetect(object):
             # Find all the faces and face encodings in the current frame of video
             # for rotate_img in [0, 90, 180, 270]:
             #    frame = imutils.rotate(frame, rotate_img)
-            self.face_locations = face_recognition.face_locations(rgb_small_frame, number_of_times_to_upsample=3,
-                                                                  model='hog')
-            self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations, num_jitters=1,
-                                                                  model='small')
+            self.face_locations = face_recognition.face_locations(rgb_small_frame,
+                                                                  number_of_times_to_upsample=self.number_of_times,
+                                                                  model=self.model_name)
+            self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations,
+                                                                  num_jitters=self.number_jitters,
+                                                                  model='large')
             found_face = {}
             count_face_found = len(self.face_encodings)
             if count_face_found > 0:
@@ -102,7 +110,8 @@ class CameraDetect(object):
                     name_id = self.known_face_code[best_match_index]
                     # print(name_id)
                     preson_name = self.labels_name.get(int(name_id))
-                    list_p = {name_id: preson_name}
+                    # list_p = {name_id: preson_name}
+                    list_p = {name_id: min(face_distances)}
                     list_p.update(self.list_name_show)
                     self.list_name_show = list_p
 
@@ -125,8 +134,10 @@ class CameraDetect(object):
                     for v, ids in found_face.items():
                         if ids != 1000:
                             if id == ids and value == min(ss):
-                                face_names[i] = self.labels_name.get(int(ids)) + " - " + str(
-                                    (float("{:.2f}".format(value))))
+                                # face_names[i] = self.labels_name.get(int(ids)) + " - " + str(
+                                #    (float("{:.2f}".format(value))))
+                                vl = str(value)
+                                face_names[i] = self.labels_name.get(int(ids)) + " - " + vl[:4]
                             elif id == ids and value != min(ss):
                                 face_names[i] = 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'
             # end checking
@@ -189,22 +200,9 @@ class CameraDetect(object):
         cropped_image = Image.fromarray(cropped_array)
         cropped_image.save(path)
 
-    """def checkface(self, img):
-        image = cv2.imread(img)
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        faces = self.detector.detectMultiScale(
-            gray,
-            scaleFactor=1.3,
-            minNeighbors=3,
-            minSize=(30, 30)
-        )
-        imgs = image
-        for (x, y, w, h) in faces:
-            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            roi_color = image[y:y + h, x:x + w]
-            path = os.path.join(root, 'static', 'photos', 'detect_face', str(w) + str(h) + '_faces.jpg')
-            cv2.imwrite(path, roi_color)
-            imgs = cv2.imread(path)
-        im_v = cv2.hconcat([imgs, imgs,imgs,imgs])
-
-        cv2.imwrite(img, im_v)"""
+    def SetParameters(self, generate_camera_id, number_of_times, number_jitters, model_name):
+        self.generate_camera_id = generate_camera_id
+        self.webcam_id = generate_camera_id
+        self.number_of_times = int(number_of_times)
+        self.number_jitters = int(number_jitters)
+        self.model_name = model_name.lower()

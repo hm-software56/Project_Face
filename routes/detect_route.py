@@ -80,13 +80,15 @@ def genDetect(camera):
         if camera.img_detect:
             break
 
-        if s %2 == 0:  # use cross one step fast then detect all
+        if s % 2 == 0:  # use cross one step fast then detect all
             camera.process_this_frame = True
-            #print('xxxxxxxxxxxxxxxxxxxxx')
+            # print('xxxxxxxxxxxxxxxxxxxxx')
 
 
 @detect_route.route('/video_detect', methods=['GET', 'POST'])
 def video_detect():
+    pridectcamera.SetParameters(session['generate_camera_id'], session['number_of_times'], session['number_jitters'],
+                                session['model_name'])
     return Response(genDetect(pridectcamera),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
@@ -131,8 +133,9 @@ def getdata():
     if request.args.get('clear'):
         pridectcamera.list_name_show.clear()
     if pridectcamera.list_name_show:
-        for person_id in pridectcamera.list_name_show:
-            SaveFound(person_id, session['generate_camera_id'])
+        # print(pridectcamera.list_name_show)
+        for person_id, value in pridectcamera.list_name_show.items():
+            SaveFound(person_id, session['generate_camera_id'], value)
         pridectcamera.list_name_show.clear()
         if pridectcamera.img_detect:
             os.remove(os.path.join('static', 'photos', 'detect', pridectcamera.img_detect))

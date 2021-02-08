@@ -14,6 +14,7 @@ from models.province import Provinces, ListProvince
 from models.district import Districts, ListDistrictBy
 from models.village import Villages, ListVillageBy
 import glob
+import matplotlib.pyplot as plt
 
 register_route = Blueprint('register_route', __name__)
 setdatacamera = VideoCamera()
@@ -66,7 +67,10 @@ def showdetailperson():
         all_image = [(str(entry.code), f) for _, f in zip(range(100),
                                                           os.listdir(
                                                               os.path.join('static', 'imgdataset', str(entry.code))))]
-
+    """plt.plot([1, 2, 13, 14])
+    plt.ylabel('some numbers')
+    chart_name=str(randint(11111,99999))+'.png'
+    plt.savefig( os.path.join('static', 'imgstastic',chart_name))"""
     return jsonify(result=render_template('model_show_person_detail.html', form=form, all_image=all_image))
 
 

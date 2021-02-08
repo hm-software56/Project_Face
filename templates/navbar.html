@@ -15,6 +15,10 @@
             <li class="nav-item active mr-auto">
                 <a class="nav-link" href="/listregister"> <i class="fa fa-users"></i> ລາຍຊື່ຂໍ້ມູນບັດປະຈໍາຕົວ</a>
             </li>
+            <li class="nav-item active mr-auto">
+                <a class="nav-link" href="/setting"> <i class="fa fa-cog"></i> ຕັ້ງຄ່າ</a>
+            </li>
+
             {% if session['login'] and session['login']['type']=="Admin" %}
                 <li class="nav-item active mr-auto">
                     <a class="nav-link" href="/install"> <i class="fa fa-cogs"></i> ວິທີການຕິດຕັ້ງ ແລະ Run</a>

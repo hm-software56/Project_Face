@@ -9,7 +9,9 @@ import os
 import shutil
 import glob
 from models.register import Register
+from models.setting import Setting
 from models.user import checkLogin
+from routes.setting_route import setting_route
 import random
 
 app = Flask(__name__)
@@ -19,6 +21,7 @@ app.register_blueprint(register_route)
 app.register_blueprint(detect_route)
 app.register_blueprint(training_route)
 app.register_blueprint(user_route)
+app.register_blueprint(setting_route)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Da123!@#@localhost/face_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -54,11 +57,31 @@ def home():
 @app.route('/index', methods=['POST', 'GET'])
 def index():
     # use for checking when deteted get data to display
-    try:
+    model_seeting = Setting.query.order_by(Setting.id.desc()).first()
+    if model_seeting:
+        session['generate_camera_id'] = model_seeting.camera_id
+        session['number_of_times'] = model_seeting.number_of_times
+        session['number_jitters'] = model_seeting.number_jitters
+        session['model_name'] = model_seeting.model_name
+
+    else:
+        model_seeting = Setting()
+        model_seeting.camera_id = 0,
+        model_seeting.number_of_times = 1,
+        model_seeting.number_jitters = 1,
+        model_seeting.model_name = 'HOG',
+        db.session.add(model_seeting)
+        db.session.commit()
+        session['generate_camera_id'] = model_seeting.camera_id
+        session['number_of_times'] = model_seeting.number_of_times
+        session['number_jitters'] = model_seeting.number_jitters
+        session['model_name'] = model_seeting.model_name
+    """try:
         # session['generate_camera_id']
+        setting = Setting.query.order_by(Setting.id.desc()).first()
         session['generate_camera_id'] = random.randint(000000, 999999)
     except:
-        session['generate_camera_id'] = random.randint(000000, 999999)
+        session['generate_camera_id'] = random.randint(000000, 999999)"""
     return render_template('index.html', camera='Camera', list_name='')
 
 
