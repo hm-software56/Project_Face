@@ -117,7 +117,7 @@ class CameraDetect(object):
                 # print(np.amin(face_distances))
                 # print('loop ' + str(i))
                 # print(matches[best_match_index])
-
+                #print(self.known_face_code);exit()
                 if matches[best_match_index]:  # and distance_same_face:
                     name_id = self.known_face_code[best_match_index]
                     # vl = str(np.amin(face_distances))

@@ -66,7 +66,7 @@ class Traindata(object):
                                                                                  num_jitters=self.number_jitters,
                                                                                  model='large')[0]
                                 known_face_encodings.append(image_encoding)
-                            known_face_ids.append(face_code)
+                                known_face_ids.append(face_code)
                         except:
                             os.remove(image)
                             # print(image)
