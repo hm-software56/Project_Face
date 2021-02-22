@@ -29,10 +29,13 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        {{ wtf.form_field(form.accurate, class='form-control', placeholder='ກໍານົດລະດັບຖືກຕ້ອງ %') }}
+                                    </div>
+                                    <div class="col-md-4">
                                         {{ wtf.form_field(form.number_of_times, class='form-control', placeholder='ຈໍານວນຄັ້ງຊອກໃບໜ້າ') }}
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         {{ wtf.form_field(form.number_jitters, class='form-control', placeholder='ຈໍານວນຄັ້ງວິເຄາະໃບໜ້າ') }}
                                     </div>
                                 </div>

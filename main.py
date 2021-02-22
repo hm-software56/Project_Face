@@ -23,6 +23,7 @@ app.register_blueprint(training_route)
 app.register_blueprint(user_route)
 app.register_blueprint(setting_route)
 
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Da123!@#@183.182.107.122:2020/face_db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Da123!@#@localhost/face_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # db = SQLAlchemy()
@@ -34,14 +35,11 @@ with app.app_context():
 @app.before_request
 def before_request_func():
     if str(request.url_rule) == '/domain':
-        print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
         return render_template('domain.html')
     if checkLogin() == False:
         url = str(request.url_rule)
         if not url in '/login' and '/static/' not in request.path:
             return redirect(url_for('user_route.login'))
-        # if request.script_root != "/static":
-        #    print(request.script_root)
 
 
 @app.route('/domain', methods=['POST', 'GET'])
@@ -62,6 +60,7 @@ def index():
         session['generate_camera_id'] = model_seeting.camera_id
         session['number_of_times'] = model_seeting.number_of_times
         session['number_jitters'] = model_seeting.number_jitters
+        session['accurate'] = 1 - ((model_seeting.accurate - 10) / 100)
         session['model_name'] = model_seeting.model_name
 
     else:
@@ -69,12 +68,14 @@ def index():
         model_seeting.camera_id = 0,
         model_seeting.number_of_times = 1,
         model_seeting.number_jitters = 1,
+        model_seeting.accurate = 90,  # 90%
         model_seeting.model_name = 'HOG',
         db.session.add(model_seeting)
         db.session.commit()
         session['generate_camera_id'] = model_seeting.camera_id
         session['number_of_times'] = model_seeting.number_of_times
         session['number_jitters'] = model_seeting.number_jitters
+        session['accurate'] = 1 - (model_seeting.accurate / 100)
         session['model_name'] = model_seeting.model_name
     """try:
         # session['generate_camera_id']

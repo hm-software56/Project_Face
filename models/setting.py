@@ -10,6 +10,7 @@ class Setting(db.Model):
     camera_id = db.Column(db.String(255))
     number_of_times = db.Column(db.Integer)
     number_jitters = db.Column(db.Integer)
+    accurate = db.Column(db.Integer)
     model_name = db.Column(db.String(255))
 
 
@@ -18,6 +19,6 @@ class SettingForm(FlaskForm):
     camera_id = StringField('ລະຫັດ/IP ກ້ອງ', [validators.DataRequired()])
     number_of_times = IntegerField('ຈໍານວນຄັ້ງຊອກໃບໜ້າ', [validators.DataRequired()])
     number_jitters = IntegerField('ຈໍານວນຄັ້ງວິເຄາະໃບໜ້າ', [validators.DataRequired()])
-    # model_name = IntegerField('ຈໍານວນຄັ້ງວິເຄາະໃບໜ້າ', [validators.DataRequired()])
+    accurate = IntegerField('ຖືກຕ້ອງ', [validators.DataRequired()])
     model_name = SelectField('ວິທິການ (Model)', choices=[('HOG', 'HOG'), ('CNN', 'CNN'), ('HOGCNN', 'HOGCNN')],
                              validators=[validators.DataRequired()])

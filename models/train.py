@@ -52,13 +52,20 @@ class Traindata(object):
                     for image in path:
                         try:
                             image_load = face_recognition.load_image_file(image)
-                            face_locations = face_recognition.face_locations(image_load,
-                                                                             number_of_times_to_upsample=self.number_of_times,
-                                                                             model=self.model_name)
-                            image_encoding = face_recognition.face_encodings(image_load, face_locations,
-                                                                             num_jitters=self.number_jitters,
-                                                                             model='large')[0]
-                            known_face_encodings.append(image_encoding)
+                            if self.model_name == 'hogcnn':  # Merge HOG and CNN Together
+                                models = ['hog', 'cnn']
+                            else:
+                                models = [self.model_name]
+                            i=0
+                            for model in models:
+                                i=i+1
+                                face_locations = face_recognition.face_locations(image_load,
+                                                                                 number_of_times_to_upsample=self.number_of_times,
+                                                                                 model=model)
+                                image_encoding = face_recognition.face_encodings(image_load, face_locations,
+                                                                                 num_jitters=self.number_jitters,
+                                                                                 model='large')[0]
+                                known_face_encodings.append(image_encoding)
                             known_face_ids.append(face_code)
                         except:
                             os.remove(image)

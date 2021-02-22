@@ -69,7 +69,7 @@ def predict():
 
 
 def genDetect(camera):
-    print(camera.webcam_id)
+    # print(camera.webcam_id)
     camera.video = cv2.VideoCapture(camera.webcam_id)
     s = 0
     while True:
@@ -77,18 +77,21 @@ def genDetect(camera):
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+        # Disable test manual images loop
         if camera.img_detect:
             break
 
         if s % 2 == 0:  # use cross one step fast then detect all
             camera.process_this_frame = True
-            # print('xxxxxxxxxxxxxxxxxxxxx')
+        # print('xxxxxxxxxxxxxxxxxxxxx')
 
 
 @detect_route.route('/video_detect', methods=['GET', 'POST'])
 def video_detect():
     pridectcamera.SetParameters(session['generate_camera_id'], session['number_of_times'], session['number_jitters'],
-                                session['model_name'])
+                                session['model_name'], session['accurate'])
+
     return Response(genDetect(pridectcamera),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
@@ -130,15 +133,21 @@ def uploadfiledetect():
 
 @detect_route.route('/getdata', methods=['GET'])
 def getdata():
+    # pridectcamera.xxx = pridectcamera.xxx + 1  # enable test manual images loop
     if request.args.get('clear'):
         pridectcamera.list_name_show.clear()
     if pridectcamera.list_name_show:
         # print(pridectcamera.list_name_show)
+        id = []
         for person_id, value in pridectcamera.list_name_show.items():
-            SaveFound(person_id, session['generate_camera_id'], value)
-        pridectcamera.list_name_show.clear()
+            id.append(person_id)
+            SaveFound(person_id, session['generate_camera_id'], value, session['model_name'])
+        # pridectcamera.list_name_show.clear()
         if pridectcamera.img_detect:
-            os.remove(os.path.join('static', 'photos', 'detect', pridectcamera.img_detect))
+            try:
+                os.remove(os.path.join('static', 'photos', 'detect', pridectcamera.img_detect))
+            except:
+                print('dont have remove img pridect.!')
 
         model = Register.query \
             .join(Provinces, Provinces.id == Register.province_id) \
@@ -147,7 +156,8 @@ def getdata():
             .join(ListFound, ListFound.person_id == Register.code) \
             .add_columns(Register.id, Register.code, Register.first_name, Register.last_name, Provinces.pro_name_la,
                          Districts.dis_name_la, Villages.vill_name_la, ListFound.camera_id, ListFound.camera_id) \
-            .filter(ListFound.camera_id.in_([session['generate_camera_id']])).order_by(ListFound.id.desc()).all()
+            .filter(ListFound.camera_id.in_([session['generate_camera_id']]), ListFound.person_id.in_(id)).order_by(
+            ListFound.id.desc()).all()
         return jsonify(result=render_template('persion_detail.html', model=model))
     else:
         return 'No new Detetd new person'

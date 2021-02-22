@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>
+<!--<script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>-->
 <div class="table-responsive">
     <table class="table table-bordered">
         <thead>
@@ -21,27 +21,27 @@
                                    url  : '/showdetailperson?id='+{{ data.id }},
                                    success  : function(response) {
                                    $('#show_person_detail').html(response.result);
-                        }
-                        });return false;"
+                                   }
+                                   });return false;"
                         >
-                        <table class="table table-hover mb-0" style="width: 250px !important;">
-                            <tr>
-                                <td width="10">ຊື່:</td>
-                                <td>{{ data.first_name }} {{ data.last_name }}</td>
-                            </tr>
-                            <tr>
-                                <td>ແຂວງ:</td>
-                                <td> {{ data.pro_name_la }}</td>
-                            </tr>
-                            <tr>
-                                <td>ເມືອງ:</td>
-                                <td>{{ data.dis_name_la }}</td>
-                            </tr>
-                            <tr>
-                                <td>ບ້ານ:</td>
-                                <td>{{ data.vill_name_la }}</td>
-                            </tr>
-                        </table>
+                            <table class="table table-hover mb-0" style="width: 250px !important;">
+                                <tr>
+                                    <td width="10">ຊື່:</td>
+                                    <td>{{ data.first_name }} {{ data.last_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ແຂວງ:</td>
+                                    <td> {{ data.pro_name_la }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ເມືອງ:</td>
+                                    <td>{{ data.dis_name_la }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ບ້ານ:</td>
+                                    <td>{{ data.vill_name_la }}</td>
+                                </tr>
+                            </table>
                         </a>
                     </td>
 

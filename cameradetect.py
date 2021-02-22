@@ -13,6 +13,7 @@ import random
 # from flask_sqlalchemy import SQLAlchemy
 from models.register import Register
 import imutils
+from collections import defaultdict
 
 # db = SQLAlchemy()
 root = os.path.dirname(os.path.abspath(__file__))
@@ -36,7 +37,9 @@ class CameraDetect(object):
         self.generate_camera_id = 0
         self.number_of_times = 1
         self.number_jitters = 1
+        self.accurate = 0.35
         self.model_name = 'hog'
+        self.xxx = 1
 
     def __del__(self):
         try:
@@ -48,6 +51,12 @@ class CameraDetect(object):
         if self.img_detect:
             path = os.path.join(root, 'static', 'photos', 'detect', self.img_detect)
             frame = cv2.imread(path)
+
+            # Enable test manual images loop
+            """print('==============================================')
+            print('read===' + str(self.xxx))
+            self.img_detect = str(self.xxx) + '.jpg'"""
+
         else:
             success, frame = self.video.read()
         try:
@@ -59,19 +68,34 @@ class CameraDetect(object):
             return jpeg.tobytes()
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
         rgb_small_frame = small_frame[:, :, ::-1]
-        face_names = []
         if self.process_this_frame:
             # Find all the faces and face encodings in the current frame of video
             # for rotate_img in [0, 90, 180, 270]:
             #    frame = imutils.rotate(frame, rotate_img)
-            self.face_locations = face_recognition.face_locations(rgb_small_frame,
-                                                                  number_of_times_to_upsample=self.number_of_times,
-                                                                  model=self.model_name)
+            if self.model_name == 'hogcnn':  # Merge HOG and CNN Together
+                models = ['hog', 'cnn']
+            else:
+                models = [self.model_name]
+            self.face_locations.clear()
+            face_location_count = 0
+            for model in models:
+                face_locations = face_recognition.face_locations(rgb_small_frame,
+                                                                 number_of_times_to_upsample=self.number_of_times,
+                                                                 model=model)
+                face_location_count = len(face_locations)
+                self.face_locations = self.face_locations + face_locations
+                # self.face_locations = face_locations
+
             self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations,
                                                                   num_jitters=self.number_jitters,
                                                                   model='large')
+            # print(self.face_encodings)
             found_face = {}
+            face_names = []
             count_face_found = len(self.face_encodings)
+            # print(count_face_found)
+
+            # Disable test manual images loop
             if count_face_found > 0:
                 self.process_this_frame = False
 
@@ -81,73 +105,68 @@ class CameraDetect(object):
                 # distance_same_face = False
                 # See if the face is a match for the known face(s)
                 # tolerance=0.4 is distance_same_face
-                distans = [0.3, 0.4]
-                for dst in distans:
-                    matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=dst)
-                    if True in matches:
-                        break
+                # distans = [0.3, 0.4]
+                matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding,
+                                                         tolerance=self.accurate)
                 face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
-                """j = np.array(face_distances)
-                face_distance_lessthen = np.sort(j[j < 0.1])  #
-                if face_distance_lessthen.all():
-                    distance_same_face = True"""
-                """for i, face_distance in enumerate(face_distances):
-                    # print(i)
-                    # print("The test image has a distance of {:.2} from known image #{}".format(face_distance, i))
-                    # print("- With a normal cutoff of 0.6, would the test image match the known image? {}".format(
-                    #    face_distance < 0.6))
-                    # print("- With a very strict cutoff of 0.5, would the test image match the known image? {}".format(
-                    #    face_distance < 0.5))
-                    if (face_distance < 0.4):
-                        # print(format(face_distance, '2f'))
-                        distance_same_face = True"""
                 # print(matches)
                 best_match_index = np.argmin(face_distances)
-                """print(best_match_index)
-                print(face_distances)
-                print(matches[best_match_index])"""
+                # print(best_match_index)
+                # print(np.amin(face_distances))
+                # print(best_match_index)
+                # print(np.amin(face_distances))
+                # print('loop ' + str(i))
+                # print(matches[best_match_index])
+
                 if matches[best_match_index]:  # and distance_same_face:
                     name_id = self.known_face_code[best_match_index]
-                    # print(name_id)
-                    preson_name = self.labels_name.get(int(name_id))
+                    # vl = str(np.amin(face_distances))
+                    # preson_name = self.labels_name.get(int(name_id)) + " - " + vl[:4]
                     # list_p = {name_id: preson_name}
-                    list_p = {name_id: min(face_distances)}
-                    list_p.update(self.list_name_show)
-                    self.list_name_show = list_p
+                    # list_p = {name_id: min(face_distances)}
+                    # list_p.update(self.list_name_show)
+                    # self.list_name_show = list_p
 
                     found_face.update({np.amin(face_distances): name_id})
-                    face_names.append(preson_name)
+                    # face_names.append(preson_name)
 
                 else:
-                    found_face.update({random.randint(10, 100): 1000})  # set values to unkwon
-                    face_names.append(preson_name)
+                    found_face.update(
+                        {random.randint(1111111, 9999999): str(
+                            random.randint(1111111, 9999999))})  # set values to unkwon
+                    # face_names.append(preson_name)
+            # print(self.list_name_show)
+
+            # print('wwwwwwwwwwwwwwwwwwwwwwwwwwww')
             # print(found_face)
-            # use for checking multiperson distances round and get minimum distance
-            i = -1
-            for value, id in found_face.items():
+            res = defaultdict(list)
+            for key, val in found_face.items():
+                res[val].append(key)
+            names = []
+            i = 0
+            for id, val in dict(res).items():
                 i = i + 1
-                if id != 1000:
-                    ss = []
-                    for v, ids in found_face.items():
-                        if ids != 1000 and id == ids:
-                            ss.append(v)
-                    for v, ids in found_face.items():
-                        if ids != 1000:
-                            if id == ids and value == min(ss):
-                                # face_names[i] = self.labels_name.get(int(ids)) + " - " + str(
-                                #    (float("{:.2f}".format(value))))
-                                vl = str(value)
-                                face_names[i] = self.labels_name.get(int(ids)) + " - " + vl[:4]
-                            elif id == ids and value != min(ss):
-                                face_names[i] = 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'
-            # end checking
-            for (top, right, bottom, left), name in zip(self.face_locations, face_names):
+                if i <= face_location_count:
+                    if len(str(id)) < 7:  # random id not found unknow person
+                        # average = sum(val) / len(val)
+                        # val = str(average)
+                        # print(average)
+                        val = str(min(val))
+                        preson_name = self.labels_name.get(int(id)) + " - " + val[:4]
+                        names.append(preson_name)
+                        self.list_name_show.update({id: val})
+                    else:
+                        self.list_name_show.update({'0': 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'})
+                        names.append('ບໍ່ຮູ້ຈັກຄົນນີ້.!')
+            # print(names)
+            for (top, right, bottom, left), name in zip(self.face_locations, names):
                 # Scale back up face locations since the frame we detected in was scaled to 1/4 size
                 top *= 4
                 right *= 4
                 bottom *= 4
                 left *= 4
-
+                font_size = 20
+                # if len(models) == n:
                 # Draw a box around the face
                 if name != 'ບໍ່ຮູ້ຈັກຄົນນີ້.!':
                     cv2.rectangle(frame, (left, top), (right, bottom), (3, 128, 37), 2)
@@ -158,9 +177,9 @@ class CameraDetect(object):
 
                 label = name
                 tex_color = '#FFFFFF'
-                font_size = 20
                 img = self.addlaotext(frame, left + 6, bottom - 30, label, tex_color, font_size)
                 frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+
         ret, jpeg = cv2.imencode('.jpg', frame)
         return jpeg.tobytes()
 
@@ -200,9 +219,15 @@ class CameraDetect(object):
         cropped_image = Image.fromarray(cropped_array)
         cropped_image.save(path)
 
-    def SetParameters(self, generate_camera_id, number_of_times, number_jitters, model_name):
-        self.generate_camera_id = generate_camera_id
-        self.webcam_id = generate_camera_id
+    def SetParameters(self, generate_camera_id, number_of_times, number_jitters, model_name, accurate):
+        if len(generate_camera_id) > 2:
+            self.generate_camera_id = generate_camera_id
+            self.webcam_id = generate_camera_id
+        else:
+            self.generate_camera_id = int(generate_camera_id)
+            self.webcam_id = int(generate_camera_id)
+
         self.number_of_times = int(number_of_times)
         self.number_jitters = int(number_jitters)
+        self.accurate = accurate
         self.model_name = model_name.lower()
