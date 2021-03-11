@@ -8,7 +8,7 @@ from models.province import Provinces
 from models.district import Districts
 from models.village import Villages
 from models.listfounddected import SaveFound, ListFound
-import cv2
+import cv2,pafy
 from random import choice
 import time
 from flask_bootstrap import Bootstrap
@@ -43,7 +43,7 @@ def captureupload():
         pridectcamera.img_detect = filename
         # file_stats = os.stat(os.path.join(path, filename))
         # print(file_stats.st_size)
-        return True
+        return jsonify(result=render_template('predict.html', time=time.time()))
     else:
         return jsonify(result=render_template('predict.html', time=time.time()))
 
@@ -70,6 +70,13 @@ def predict():
 
 def genDetect(camera):
     # print(camera.webcam_id)
+    url = str(camera.webcam_id)
+    if "youtube" in url:
+        video = pafy.new(camera.webcam_id)
+        best = video.getbest(preftype="mp4")
+        camera.webcam_id=best.url
+        print('xxxxxxx')
+
     camera.video = cv2.VideoCapture(camera.webcam_id)
     s = 0
     while True:

@@ -176,9 +176,7 @@ body {
     font-weight: bold;
 }
 
-.bg-info {
-    background: #16a085 !important;
-}
+
 
 #loading {
     background: transparent url('http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif') center no-repeat;

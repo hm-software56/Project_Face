@@ -13,8 +13,6 @@ from werkzeug.utils import secure_filename
 from models.province import Provinces, ListProvince
 from models.district import Districts, ListDistrictBy
 from models.village import Villages, ListVillageBy
-import glob
-import matplotlib.pyplot as plt
 
 register_route = Blueprint('register_route', __name__)
 setdatacamera = VideoCamera()
