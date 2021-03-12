@@ -8,7 +8,7 @@ from models.province import Provinces
 from models.district import Districts
 from models.village import Villages
 from models.listfounddected import SaveFound, ListFound
-import cv2,pafy
+import cv2, pafy
 from random import choice
 import time
 from flask_bootstrap import Bootstrap
@@ -74,9 +74,7 @@ def genDetect(camera):
     if "youtube" in url:
         video = pafy.new(camera.webcam_id)
         best = video.getbest(preftype="mp4")
-        camera.webcam_id=best.url
-        print('xxxxxxx')
-
+        camera.webcam_id = best.url
     camera.video = cv2.VideoCapture(camera.webcam_id)
     s = 0
     while True:
@@ -172,5 +170,4 @@ def getdata():
 
 @detect_route.route('/aa', methods=['GET'])
 def aa():
-    path = os.path.join(root, 'static', 'photos', 'detect', 'name')
-    return path
+    return jsonify(pridectcamera.chart)

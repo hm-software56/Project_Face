@@ -18,7 +18,6 @@ from collections import defaultdict
 # db = SQLAlchemy()
 root = os.path.dirname(os.path.abspath(__file__))
 
-
 class CameraDetect(object):
     def __init__(self):
         self.detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -33,6 +32,7 @@ class CameraDetect(object):
         self.known_face_encodings = []
         self.list_name_show = {}
         self.img_detect = ''
+        self.chart=[];
 
         self.generate_camera_id = 0
         self.number_of_times = 1
@@ -117,7 +117,7 @@ class CameraDetect(object):
                 # print(np.amin(face_distances))
                 # print('loop ' + str(i))
                 # print(matches[best_match_index])
-                #print(self.known_face_code);exit()
+                # print(self.known_face_code);exit()
                 if matches[best_match_index]:  # and distance_same_face:
                     name_id = self.known_face_code[best_match_index]
                     # vl = str(np.amin(face_distances))
@@ -155,6 +155,8 @@ class CameraDetect(object):
                         preson_name = self.labels_name.get(int(id)) + " - " + val[:4]
                         names.append(preson_name)
                         self.list_name_show.update({id: val})
+
+                        self.chart.append(val)
                     else:
                         self.list_name_show.update({'0': 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'})
                         names.append('ບໍ່ຮູ້ຈັກຄົນນີ້.!')
