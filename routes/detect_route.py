@@ -165,7 +165,7 @@ def getdata():
             ListFound.id.desc()).all()
         return jsonify(result=render_template('persion_detail.html', model=model))
     else:
-        return 'No new Detetd new person'
+        return jsonify(result=render_template('persion_detail.html', model=''))
 
 
 @detect_route.route('/aa', methods=['GET'])
