@@ -9,13 +9,13 @@ html, body {
 }
 
 body {
-    background: #069DC6;
+    background: #02521D;
     line-height: 1.3;
     -webkit-font-smoothing: antialiased;
 }
 
 .bg-info {
-    background: #069DC6 !important;
+    background: #02521D !important;
 }
 #particles {
     width: 100%;

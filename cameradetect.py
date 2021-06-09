@@ -56,12 +56,12 @@ class CameraDetect(object):
             """print('==============================================')
             print('read===' + str(self.xxx))
             self.img_detect = str(self.xxx) + '.jpg'"""
-
         else:
             success, frame = self.video.read()
         try:
             small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
         except:  # check camera if done have don't have return not found
+            print('Make sure your you antivirus not disable camera.!')
             path = os.path.join(root, 'static', 'default', 'notfound_camera.png')
             frame = cv2.imread(path)
             ret, jpeg = cv2.imencode('.jpg', frame)

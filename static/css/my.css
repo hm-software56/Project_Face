@@ -160,20 +160,21 @@ body {
 
 .text {
     text-transform: uppercase;
-    background: linear-gradient(to right, red 0%, darkgreen 100%);
+    background: linear-gradient(to right, red 0%, white 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 24px;
+    font-weight: bolder;
 
 }
 
 .text_t {
     text-transform: uppercase;
-    background: linear-gradient(to right, red 0%, green 100%);
+    background: linear-gradient(to right, red 0%, white 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 20px;
-    font-weight: bold;
+    font-weight: bolder;
 }
 
 
