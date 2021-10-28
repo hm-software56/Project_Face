@@ -1,17 +1,25 @@
 <!--<script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>-->
+{% if alert==True %}
+    <!--<audio id="myAudio" src="/static/alert.wav"></audio>
+    <script>
+        document.getElementById('myAudio').play();
+    </script>-->
+{% endif %}
 <div class="table-responsive">
-    <table class="table table-bordered">
+    <table class="table table-bordered" style="border: #c0392b !important;">
         <thead>
         <tr>
-            <th class="text-center">ຮູບພາບ</th>
+                <th class="text-center">ຮູບພາບ</th>
             <th colspan="2" class="text-center">ລາຍລະອຽດ</th>
         </tr>
         </thead>
         <tbody>
         {% if model %}
             {% for data in model %}
-                <tr>
-                    <td width="150"><img src="static\data_person\{{ data.code }}\1.jpg" class="rounded img-fluid"></td>
+                <tr style="background-color:gray">
+                        <td width="150" class="align-middle">
+                            <img src="static\data_person\{{ data.code }}\1.jpg" class="rounded img-fluid">
+                        </td>
                     <td class="p-0">
                         <a href="#" class="text-dark " style="text-decoration: none;"
                            onclick="
@@ -24,22 +32,36 @@
                                    }
                                    });return false;"
                         >
-                            <table class="table table-hover mb-0" style="width: 250px !important;">
+                            <table class="table table-hover mb-0" style="width: 100% !important;">
                                 <tr>
-                                    <td width="10">ຊື່:</td>
-                                    <td>{{ data.first_name }} {{ data.last_name }}</td>
+                                    <td style="color: red"><b>ປັດປະຈໍາຕົວ ເລກທີ: {{ data.card_id }}</b></td>
                                 </tr>
                                 <tr>
-                                    <td>ແຂວງ:</td>
-                                    <td> {{ data.pro_name_la }}</td>
+                                    <td>
+                                        ຊື່: {{ data.first_name }} {{ data.last_name }}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>ເມືອງ:</td>
-                                    <td>{{ data.dis_name_la }}</td>
+                                    <td>
+                                        ວັນເດືອນປີເກິດ: {{ data.date_birth }}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>ບ້ານ:</td>
-                                    <td>{{ data.vill_name_la }}</td>
+                                    <td>
+                                        ທີ່ຢູ່ປັດຈຸບັນ: {{ data.vill_name_la }}, ມ {{ data.dis_name_la }},
+                                        ຂ {{ data.pro_name_la }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        ເຊື້ອຊາດ: {{ data.location_name }}, ສັນຊາດ: {{ data.section_name }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ວັນທິອອກ: {{ data.start_date }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ໝົດກໍານົດ: {{ data.expire_date }}</td>
                                 </tr>
                             </table>
                         </a>

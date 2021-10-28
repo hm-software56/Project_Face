@@ -31,6 +31,14 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+@detect_route.route('/indexfull', methods=['POST', 'GET'])
+def indexfull():
+    pridectcamera.loadLabelName()
+    pridectcamera.__del__()
+    pridectcamera.process_this_frame = True
+    return render_template('index_full.html')
+
+
 @detect_route.route('/capturepridict', methods=['GET', 'POST'])
 def captureupload():
     if request.files.get('webcam'):
@@ -139,6 +147,10 @@ def uploadfiledetect():
 @detect_route.route('/getdata', methods=['GET'])
 def getdata():
     # pridectcamera.xxx = pridectcamera.xxx + 1  # enable test manual images loop
+    if request.args.get('fullscreen'):
+        fullscreen = 'persion_detail_full_screen.html'
+    else:
+        fullscreen = 'persion_detail.html'
     if request.args.get('clear'):
         pridectcamera.list_name_show.clear()
     if pridectcamera.list_name_show:
@@ -159,13 +171,17 @@ def getdata():
             .join(Districts, Districts.id == Register.district_id) \
             .join(Villages, Villages.id == Register.village_id) \
             .join(ListFound, ListFound.person_id == Register.code) \
-            .add_columns(Register.id, Register.code, Register.first_name, Register.last_name, Provinces.pro_name_la,
+            .add_columns(Register.id, Register.card_id, Register.start_date, Register.expire_date, Register.date_birth,
+                         Register.code,
+                         Register.first_name, Register.last_name, Register.location_name, Register.section_name,
+                         Provinces.pro_name_la,
                          Districts.dis_name_la, Villages.vill_name_la, ListFound.camera_id, ListFound.camera_id) \
             .filter(ListFound.camera_id.in_([session['generate_camera_id']]), ListFound.person_id.in_(id)).order_by(
             ListFound.id.desc()).all()
-        return jsonify(result=render_template('persion_detail.html', model=model))
+        return jsonify(
+            result=render_template(fullscreen, model=model, alert=pridectcamera.alertnotifycation))
     else:
-        return jsonify(result=render_template('persion_detail.html', model=''))
+        return jsonify(result=render_template(fullscreen, model='', alert=pridectcamera.alertnotifycation))
 
 
 @detect_route.route('/aa', methods=['GET'])

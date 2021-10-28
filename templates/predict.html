@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>
+<!--<script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>-->
 <!-- time use for ajax refrest show img -->
 <script>
     function loadImage() {
@@ -11,9 +11,11 @@
                     $("#result_person").html(data.result);
                 },
             });
+            loadImage();
             return false;
         }, 1000);
     }
+    loadImage();
 </script>
 <img id="bg" src="{{ url_for('detect_route.video_detect',time=time) }}" class=" img-fluid img-rounded"
      onload="loadImage()">

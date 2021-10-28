@@ -1,26 +1,33 @@
-<div class="container my-4">
-    <!-- Modal -->
-    <div class="modal fade right" id="exampleModalPreview" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
-        <div class="modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
-            <div class="modal-content-full-width modal-content ">
-                <div class=" modal-header-full-width   modal-header text-center">
-                    <h5 class="modal-title w-100" id="exampleModalPreviewLabel">Material Design Full Screen Modal</h5>
-                    <button type="button" class="close " data-dismiss="modal" aria-label="Close">
-                        <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/found_person.js') }}"></script>
+    time use for ajax refrest show img -->
+    <script>
+        function loadImage() {
+            setTimeout(function () {
+                $.ajax({
+                    url: '/getdata?fullscreen=true',
+                    dataType: "json",
+                    success: function (data) {
+                        $("#result_person").html(data.result);
+                    },
+                });
+                loadImage();
+                return false;
+            }, 500);
+        }
 
-                    <h1 class="section-heading text-center wow fadeIn my-5 pt-3"> Not for money, but for humanity</h1>
-                </div>
-                <div class="modal-footer-full-width  modal-footer">
-                    <button type="button" class="btn btn-danger btn-md btn-rounded" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary btn-md btn-rounded">Save changes</button>
-                </div>
+        loadImage();
+    </script>
+    <div class="container1-fluid">
+        <div class="col-md-12 float-md-right">
+            <div class="float-none">
+                <div id="result_person" style="position: absolute;"></div>
             </div>
         </div>
     </div>
-
-</div>
-
+    <img width="100%" height="100%" src="{{ url_for('detect_route.video_detect',time=time) }}"
+         class=" img-fluid img-rounded" onload="loadImage()">
+    </div>
+{% endblock %}

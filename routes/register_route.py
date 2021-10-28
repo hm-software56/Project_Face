@@ -224,7 +224,7 @@ def rdel():
 @register_route.route('/generatcode', methods=['GET', 'POST'])
 def generatcode():
     face_code = [];
-    for i in range(1, 44):
+    for i in range(1, 51):
         face_code.append(i)
         print(i);
     try:

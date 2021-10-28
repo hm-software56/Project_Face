@@ -10,6 +10,7 @@ from models.train import Traindata
 from autocrop import Cropper
 from numpy import load
 import random
+import urllib.request as urlip
 # from flask_sqlalchemy import SQLAlchemy
 from models.register import Register
 import imutils
@@ -17,6 +18,7 @@ from collections import defaultdict
 
 # db = SQLAlchemy()
 root = os.path.dirname(os.path.abspath(__file__))
+
 
 class CameraDetect(object):
     def __init__(self):
@@ -32,7 +34,7 @@ class CameraDetect(object):
         self.known_face_encodings = []
         self.list_name_show = {}
         self.img_detect = ''
-        self.chart=[];
+        self.chart = [];
 
         self.generate_camera_id = 0
         self.number_of_times = 1
@@ -40,6 +42,7 @@ class CameraDetect(object):
         self.accurate = 0.35
         self.model_name = 'hog'
         self.xxx = 1
+        self.alertnotifycation = False
 
     def __del__(self):
         try:
@@ -57,7 +60,14 @@ class CameraDetect(object):
             print('read===' + str(self.xxx))
             self.img_detect = str(self.xxx) + '.jpg'"""
         else:
-            success, frame = self.video.read()
+            if 'out.jpg' in str(self.webcam_id):  # ip CCTV Get Streaming for images
+                url = self.webcam_id
+                url_response = urlip.urlopen(url)
+                img_array = np.array(bytearray(url_response.read()), dtype=np.uint8)
+                frame = cv2.imdecode(img_array, -1)
+            else:
+                success, frame = self.video.read()
+
         try:
             small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
         except:  # check camera if done have don't have return not found
@@ -120,6 +130,7 @@ class CameraDetect(object):
                 # print(self.known_face_code);exit()
                 if matches[best_match_index]:  # and distance_same_face:
                     name_id = self.known_face_code[best_match_index]
+                    self.alertnotifycation = True
                     # vl = str(np.amin(face_distances))
                     # preson_name = self.labels_name.get(int(name_id)) + " - " + vl[:4]
                     # list_p = {name_id: preson_name}
@@ -134,6 +145,7 @@ class CameraDetect(object):
                     found_face.update(
                         {random.randint(1111111, 9999999): str(
                             random.randint(1111111, 9999999))})  # set values to unkwon
+                    self.alertnotifycation = False
                     # face_names.append(preson_name)
             # print(self.list_name_show)
 
@@ -151,12 +163,15 @@ class CameraDetect(object):
                         # average = sum(val) / len(val)
                         # val = str(average)
                         # print(average)
-                        val = str(min(val))
-                        preson_name = self.labels_name.get(int(id)) + " - " + val[:4]
-                        names.append(preson_name)
-                        self.list_name_show.update({id: val})
+                        try:
+                            val = str(min(val))
+                            preson_name = self.labels_name.get(int(id)) + " - " + val[:4]
+                            names.append(preson_name)
+                            self.list_name_show.update({id: val})
 
-                        self.chart.append(val)
+                            self.chart.append(val)
+                        except:
+                            print('Errors some values')
                     else:
                         self.list_name_show.update({'0': 'ບໍ່ຮູ້ຈັກຄົນນີ້.!'})
                         names.append('ບໍ່ຮູ້ຈັກຄົນນີ້.!')

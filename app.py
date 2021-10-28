@@ -47,6 +47,7 @@ def domain():
     return redirect('index')
 
 
+
 @app.route('/', methods=['POST', 'GET'])
 def home():
     return redirect('index')
@@ -85,12 +86,6 @@ def index():
         session['generate_camera_id'] = random.randint(000000, 999999)"""
     return render_template('index.html', camera='Camera', list_name='')
 
-
-@app.route('/indexfull', methods=['POST', 'GET'])
-def indexfull():
-    return 'aaaaaaaaaaaa'
-
-
 @app.route('/install', methods=['POST', 'GET'])
 def install():
     return render_template('install.html')
@@ -118,7 +113,6 @@ def cleanolddata():
 def jswebcam():
     return render_template('js_webcam_copy.html')
 
-
 if __name__ == '__main__':
-    app.run(debug=True)
-    #app.run(debug=True, ssl_context=('cert.pem', 'key.pem'), host='192.168.50.117',port='2020')
+    app.run(debug=False)
+    #app.run(debug=True, ssl_context=('cert.pem', 'key.pem'), host='192.168.50.108',port='2020')
